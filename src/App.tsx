@@ -1,19 +1,16 @@
 import { Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useTheme, useAppStore } from '@/stores'
-import Loading from '@/components/Loading'
-import NotFound from '@/pages/NotFound'
-import { Toaster } from '@/components/ui/sonner'
+import Loading from '@/layout/loading'
+import NotFound from '@/layout/not-found'
 
-const Main = lazy(() => import('@/pages/Main'))
-const Home = lazy(() => import('@/pages/Home'))
-const Quote = lazy(() => import('@/pages/Quote'))
-const QuoteDetail = lazy(() => import('@/pages/QuoteDetail'))
-const Article = lazy(() => import('@/pages/Article'))
-const ArticleDetail = lazy(() => import('@/pages/ArticleDetail'))
-const About = lazy(() => import('@/pages/About'))
-const AiSpeaking = lazy(() => import('@/pages/AiSpeaking'))
-const AiSpeakingDetail = lazy(() => import('@/pages/AiSpeakingDetail'))
+
+const Main = lazy(() => import('@/layout/main/index'))
+const Home = lazy(() => import('@/pages/home'))
+const Quote = lazy(() => import('@/pages/quote'))
+const QuoteDetail = lazy(() => import('@/pages/quote-detail'))
+const Article = lazy(() => import('@/pages/article'))
+const ArticleDetail = lazy(() => import('@/pages/article-detail'))
 
 export default function App() {
   useTheme()
@@ -51,7 +48,6 @@ export default function App() {
           </Routes>
         </Suspense>
       </BrowserRouter>
-      <Toaster />
     </>
   )
 }

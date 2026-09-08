@@ -1,2 +1,8 @@
-export { useTheme } from './useTheme'
-export { useAppStore } from './useAppStore'
+import {configureStore} from '@reduxjs/toolkit'
+
+export default configureStore({
+  reducer: {
+
+  },
+})
+
