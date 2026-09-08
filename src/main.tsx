@@ -1,7 +1,8 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './styles/index.css'
+import { StoreProvider } from '@/stores'
 import App from './App.tsx'
+import './styles/global.scss'
 
 async function bootstrap() {
   if (import.meta.env.DEV) {
@@ -11,7 +12,9 @@ async function bootstrap() {
 
   createRoot(document.getElementById('root')!).render(
     <StrictMode>
-      <App />
+      <StoreProvider>
+        <App />
+      </StoreProvider>
     </StrictMode>,
   )
 }

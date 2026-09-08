@@ -10,6 +10,12 @@ export default defineConfig({
       '@mocks': path.resolve(__dirname, './mocks'),
     },
   },
+  css: {
+    modules: {
+      localsConvention: 'camelCaseOnly',
+      generateScopedName: '[name]__[local]___[hash:base64:5]',
+    },
+  },
   server: {
     port: 9090,
     open: true,

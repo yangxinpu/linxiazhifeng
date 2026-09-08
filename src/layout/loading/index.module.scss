@@ -1,0 +1,67 @@
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--background) 95%, transparent);
+  backdrop-filter: blur(4px);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.spinnerWrapper {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+
+.logoImg {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  position: relative;
+  z-index: 10;
+}
+
+.spinnerSvg {
+  position: absolute;
+  inset: 0;
+  width: 80px;
+  height: 80px;
+  animation: spin 1s linear infinite;
+}
+
+.title {
+  font-size: 30px;
+  font-family: var(--font-quote);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #0fd9a6 0%, #2b8ae0 50%, #0fd9a6 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient 3s ease infinite;
+}

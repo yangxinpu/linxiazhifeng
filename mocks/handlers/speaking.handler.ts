@@ -30,7 +30,7 @@ export const speakingHandlers = [
     const paginatedList = filtered.slice(start, end)
 
     return HttpResponse.json({
-      code: 20000,
+      code: 0,
       message: '请求成功',
       data: {
         list: paginatedList,
@@ -57,7 +57,7 @@ export const speakingHandlers = [
     const articles = createMockSpeakingArticles(id, book.articleCount)
 
     return HttpResponse.json({
-      code: 20000,
+      code: 0,
       message: '请求成功',
       data: {
         ...book,
@@ -92,7 +92,7 @@ export const speakingHandlers = [
     }
 
     return HttpResponse.json({
-      code: 20000,
+      code: 0,
       message: '请求成功',
       data: article,
     })

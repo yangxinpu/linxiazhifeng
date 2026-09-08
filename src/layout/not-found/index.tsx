@@ -1,11 +1,12 @@
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeftOutlined as ArrowLeft } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
+import styles from "./index.module.scss"
 
 export default function NotFound() {
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground px-6">
-      <div className="flex items-center gap-0 mb-12">
-        <svg viewBox="0 0 200 200" className="w-32 h-32">
+    <section className={styles.root}>
+      <div className={styles.logoRow}>
+        <svg viewBox="0 0 200 200" className={styles.logoSvg}>
           <defs>
             <linearGradient id="blueGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#4A90D9" />
@@ -19,7 +20,7 @@ export default function NotFound() {
               <feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.2" />
             </filter>
           </defs>
-          
+
           <g className="logo-left" style={{ transformOrigin: '100px 100px' }}>
             <path
               d="M80 60 L120 50 L120 120 L90 140 L60 150 L70 80 Z"
@@ -27,7 +28,7 @@ export default function NotFound() {
               filter="url(#shadow1)"
             />
           </g>
-          
+
           <g className="logo-right" style={{ transformOrigin: '100px 100px' }}>
             <path
               d="M140 80 L160 150 L130 160 L100 100 L130 70 Z"
@@ -36,8 +37,8 @@ export default function NotFound() {
             />
           </g>
         </svg>
-        
-        <svg viewBox="0 0 200 200" className="w-32 h-32">
+
+        <svg viewBox="0 0 200 200" className={styles.logoSvg}>
           <defs>
             <linearGradient id="blueGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#4A90D9" />
@@ -51,7 +52,7 @@ export default function NotFound() {
               <feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.2" />
             </filter>
           </defs>
-          
+
           <g className="logo-left-2" style={{ transformOrigin: '100px 100px' }}>
             <path
               d="M80 60 L120 50 L120 120 L90 140 L60 150 L70 80 Z"
@@ -59,7 +60,7 @@ export default function NotFound() {
               filter="url(#shadow2)"
             />
           </g>
-          
+
           <g className="logo-right-2" style={{ transformOrigin: '100px 100px' }}>
             <path
               d="M140 80 L160 150 L130 160 L100 100 L130 70 Z"
@@ -68,8 +69,8 @@ export default function NotFound() {
             />
           </g>
         </svg>
-        
-        <svg viewBox="0 0 200 200" className="w-32 h-32">
+
+        <svg viewBox="0 0 200 200" className={styles.logoSvg}>
           <defs>
             <linearGradient id="blueGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#4A90D9" />
@@ -83,7 +84,7 @@ export default function NotFound() {
               <feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.2" />
             </filter>
           </defs>
-          
+
           <g className="logo-left-3" style={{ transformOrigin: '100px 100px' }}>
             <path
               d="M80 60 L120 50 L120 120 L90 140 L60 150 L70 80 Z"
@@ -91,7 +92,7 @@ export default function NotFound() {
               filter="url(#shadow3)"
             />
           </g>
-          
+
           <g className="logo-right-3" style={{ transformOrigin: '100px 100px' }}>
             <path
               d="M140 80 L160 150 L130 160 L100 100 L130 70 Z"
@@ -102,17 +103,17 @@ export default function NotFound() {
         </svg>
       </div>
 
-      <div className="text-center space-y-6">
-        <p className="text-muted-foreground text-lg max-w-md mx-auto">
+      <div className={styles.content}>
+        <p className={styles.desc}>
           您寻找的页面似乎在森林中迷失了方向
         </p>
-        
-        <div className="flex flex-wrap justify-center gap-4">
-          <Link 
-            to="/" 
-            className="relative inline-flex items-center gap-2 px-6 py-3 text-highlight font-medium group"
+
+        <div className={styles.btnRow}>
+          <Link
+            to="/"
+            className={`${styles.btn} group`}
           >
-            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 140 44" preserveAspectRatio="none">
+            <svg className={styles.btnSvg} viewBox="0 0 140 44" preserveAspectRatio="none">
               <defs>
                 <linearGradient id="btnGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor="#4A90D9" />
@@ -148,8 +149,8 @@ export default function NotFound() {
                 filter="url(#btnShadow)"
               />
             </svg>
-            <span className="relative z-10 flex items-center gap-2">
-              <ArrowLeft className="w-4 h-4" />
+            <span className={styles.btnContent}>
+              <ArrowLeft style={{ fontSize: 16 }} />
               返回首页
             </span>
           </Link>

@@ -10,7 +10,7 @@ export const quoteHandlers = [
     await delay(200)
 
     return HttpResponse.json({
-      code: 20000,
+      code: 0,
       message: '请求成功',
       data: CATEGORY_OPTIONS,
     })
@@ -27,7 +27,7 @@ export const quoteHandlers = [
       .slice(0, limit)
 
     return HttpResponse.json({
-      code: 20000,
+      code: 0,
       message: '请求成功',
       data: latestQuotes,
     })
@@ -52,7 +52,7 @@ export const quoteHandlers = [
     const paginatedList = sorted.slice(start, end)
 
     return HttpResponse.json({
-      code: 20000,
+      code: 0,
       message: '请求成功',
       data: {
         list: paginatedList,
@@ -77,7 +77,7 @@ export const quoteHandlers = [
     }
 
     return HttpResponse.json({
-      code: 20000,
+      code: 0,
       message: '请求成功',
       data: quote,
     })
@@ -99,7 +99,7 @@ export const quoteHandlers = [
     const detail = createMockQuoteDetail(quote)
 
     return HttpResponse.json({
-      code: 20000,
+      code: 0,
       message: '请求成功',
       data: detail,
     })

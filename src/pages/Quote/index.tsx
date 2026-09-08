@@ -1,14 +1,15 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Quote as QuoteIcon, Calendar, ChevronRight, Loader2 } from 'lucide-react'
+import { MessageOutlined as QuoteIcon, CalendarOutlined as Calendar, RightOutlined as ChevronRight, LoadingOutlined as Loader2 } from '@ant-design/icons'
 import { getQuoteList, getLatestQuotes, getCategories } from '@/api'
 import type { Quote as QuoteType } from '@/api'
-import type { Category } from '@/types/api'
+import type { Category } from '@/api'
 import { useAppStore } from '@/stores'
 import { toast } from 'sonner'
 import { formatDate } from '@/utils'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
 import { VirtualList } from '@/components/VirtualList'
+import styles from './index.module.scss'
 
 /** 名言列表页面 */
 export default function Quote() {
@@ -34,7 +35,7 @@ export default function Quote() {
         pageSize, 
         category: category || undefined 
       })
-      if (res.code === 20000 && res.data) {
+      if (res.code === 0 && res.data) {
         setQuotes(prev => [...prev, ...res.data.list])
         setPage(prev => prev + 1)
       }
@@ -72,7 +73,7 @@ export default function Quote() {
     async function fetchCategories() {
       try {
         const res = await getCategories()
-        if (res.code === 20000 && res.data) {
+        if (res.code === 0 && res.data) {
           setCategories(res.data)
         }
       } catch (error) {
@@ -88,7 +89,7 @@ export default function Quote() {
     async function fetchLatestQuote() {
       try {
         const res = await getLatestQuotes({ limit: 1 })
-        if (res.code === 20000 && res.data && res.data.length > 0) {
+        if (res.code === 0 && res.data && res.data.length > 0) {
           setLatestQuote(res.data[0])
         }
       } catch (error) {
@@ -105,7 +106,7 @@ export default function Quote() {
       showLoading()
       try {
         const res = await getQuoteList({ page: 1, pageSize, category: category || undefined })
-        if (res.code === 20000 && res.data) {
+        if (res.code === 0 && res.data) {
           setQuotes(res.data.list)
           setTotal(res.data.total)
           setPage(1)
@@ -134,48 +135,48 @@ export default function Quote() {
   const renderQuoteItem = useCallback((quote: QuoteType) => (
     <article
       onClick={() => handleQuoteClick(quote.id)}
-      className="group relative bg-card rounded-xl p-5 shadow-sm border border-border/50 cursor-pointer hover:shadow-lg hover:border-primary/20 transition-all duration-300"
+      className={styles.quoteCard}
     >
-      <div className="flex items-start gap-4">
-        <div className="flex-1 min-w-0">
-          <p className="text-base font-serif font-medium leading-relaxed group-hover:text-primary transition-colors">
+      <div className={styles.quoteCardRow}>
+        <div className={styles.quoteCardContent}>
+          <p className={styles.quoteCardText}>
             {quote.content}
           </p>
           
           {quote.background && (
-            <p className="mt-2 text-xs text-muted-foreground/70 line-clamp-2 leading-relaxed text-left">
+            <p className={styles.quoteCardBackground}>
               {quote.background}
             </p>
           )}
         </div>
         
-        <div className="flex-shrink-0 flex flex-col items-end gap-1 text-sm text-muted-foreground">
-          <span className="font-medium text-foreground/80">{quote.author}</span>
-          <span className="flex items-center gap-1 text-xs">
-            <Calendar className="w-3 h-3" />
+        <div className={styles.quoteCardMeta}>
+          <span className={styles.quoteCardAuthor}>{quote.author}</span>
+          <span className={styles.quoteCardDate}>
+            <Calendar style={{ fontSize: 12 }} />
             {formatDate(quote.createdAt)}
           </span>
         </div>
         
-        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-muted flex items-center justify-center group-hover:bg-primary/10 transition-colors">
-          <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+        <div className={styles.quoteCardArrow}>
+          <ChevronRight className={styles.quoteCardArrowInner} />
         </div>
       </div>
     </article>
   ), [handleQuoteClick])
 
   return (
-    <section className="bg-background py-12 px-6">
-      <div className="max-w-4xl mx-auto">
+    <section className={styles.section}>
+      <div className={styles.container}>
         {latestQuote && (
           <header
-            className="mb-12 cursor-pointer group"
+            className={styles.hero}
             onClick={() => handleQuoteClick(latestQuote.id)}
           >
-            <h1 className="text-2xl md:text-3xl font-serif font-bold mb-4 leading-relaxed group-hover:text-primary transition-colors animate-fade-in">
+            <h1 className={styles.heroTitle}>
               {latestQuote.content}
             </h1>
-            <p className="text-muted-foreground text-lg text-right">
+            <p className={styles.heroMeta}>
               —— {latestQuote.author}《{latestQuote.source}》
             </p>
           </header>
@@ -183,18 +184,17 @@ export default function Quote() {
 
         <div 
           ref={categoryRef}
-          className="sticky top-14 z-40 -mx-6 px-6 py-3 bg-background/80 backdrop-blur-md border-b border-border/30 transition-all duration-500"
+          className={styles.categoryBar}
         >
-          <div className={`flex flex-wrap gap-2 transition-all duration-500 ${isSticky ? 'justify-end' : 'justify-center'}`}>
+          <div 
+            className={styles.categoryBarInner}
+            style={{ justifyContent: isSticky ? 'flex-end' : 'center' }}
+          >
             {categories.map((option) => (
               <button
                 key={option.value}
                 onClick={() => handleCategoryChange(option.value)}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-                  category === option.value
-                    ? 'bg-primary text-primary-foreground shadow-sm shadow-primary/20'
-                    : 'bg-muted hover:bg-muted/80 text-muted-foreground'
-                }`}
+                className={`${styles.categoryBtn} ${category === option.value ? styles.categoryBtnActive : ''}`}
               >
                 {option.label}
               </button>
@@ -203,31 +203,30 @@ export default function Quote() {
         </div>
 
         {quotes.length === 0 ? (
-          <div className="text-center py-20">
-            <QuoteIcon className="w-16 h-16 text-muted-foreground/30 mx-auto mb-4" />
-            <p className="text-muted-foreground">暂无名言</p>
+          <div className={styles.empty}>
+            <QuoteIcon className={styles.emptyIcon} />
+            <p className={styles.emptyText}>暂无名言</p>
           </div>
         ) : (
           <>
-            <div className="space-y-4">
+            <div style={{ height: 'calc(100vh - 400px)' }}>
               <VirtualList
                 items={quotes}
                 itemHeight={140}
                 renderItem={renderQuoteItem}
-                className="h-[calc(100vh-400px)]"
                 overscan={5}
               />
             </div>
 
-            <div ref={observerRef} className="py-8 flex justify-center">
+            <div ref={observerRef} className={styles.loadMore}>
               {isLoading && (
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span className="text-sm">加载中...</span>
+                <div className={styles.loadMoreLoading}>
+                  <Loader2 style={{ fontSize: 16, animation: 'spin 1s linear infinite' }} />
+                  <span style={{ fontSize: 14 }}>加载中...</span>
                 </div>
               )}
               {!hasMore && quotes.length > 0 && (
-                <p className="text-sm text-muted-foreground">已经到底啦~</p>
+                <p className={styles.loadMoreEnd}>已经到底啦~</p>
               )}
             </div>
           </>

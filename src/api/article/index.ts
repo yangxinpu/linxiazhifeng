@@ -2,7 +2,7 @@ export type * from './type'
 
 import { get } from '../http-client'
 import type { Article, ArticleDetail } from './type'
-import type { Category, PaginatedResponse, ApiResponse } from '@/types/api'
+import type { Category, PaginatedResponse, ApiResponse } from '../global-type'
 
 export const getArticleCategories = async (): Promise<ApiResponse<Category[]>> => 
   get<Category[]>('/articles/categories')

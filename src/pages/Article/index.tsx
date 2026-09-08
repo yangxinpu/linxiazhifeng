@@ -1,15 +1,12 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { 
-  BookOpen, 
-  Heart, 
-  Loader2
-} from 'lucide-react'
+import { BookOutlined as BookOpen, HeartOutlined as Heart, LoadingOutlined as Loader2 } from '@ant-design/icons'
 import { getArticleList } from '@/api'
 import type { Article } from '@/api'
 import { useAppStore } from '@/stores'
 import { toast } from 'sonner'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
+import styles from './index.module.scss'
 
 export default function Article() {
   const navigate = useNavigate()
@@ -27,7 +24,7 @@ export default function Article() {
         page: page + 1, 
         pageSize
       })
-      if (res.code === 20000 && res.data) {
+      if (res.code === 0 && res.data) {
         setArticles(prev => [...prev, ...res.data.list])
         setPage(prev => prev + 1)
       }
@@ -51,7 +48,7 @@ export default function Article() {
           page: 1, 
           pageSize
         })
-        if (res.code === 20000 && res.data) {
+        if (res.code === 0 && res.data) {
           setArticles(res.data.list)
           setTotal(res.data.total)
           setPage(1)
@@ -71,85 +68,80 @@ export default function Article() {
   }, [navigate])
 
   return (
-    <section className="bg-background min-h-screen relative">
-      <div className="max-w-4xl mx-auto px-10 py-12">
+    <section className={styles.section}>
+      <div className={styles.container}>
         {articles.length === 0 ? (
-          <div className="text-center py-20">
-            <BookOpen className="w-16 h-16 text-muted-foreground/30 mx-auto mb-4" />
-            <p className="text-muted-foreground text-lg">暂无文章</p>
+          <div className={styles.empty}>
+            <BookOpen className={styles.emptyIcon} />
+            <p className={styles.emptyText}>暂无文章</p>
           </div>
         ) : (
           <>
-            <div className="bg-card rounded-lg">
-              <div className="space-y-0">
-                {articles.map((article, index) => (
+            <div className={styles.listCard}>
+              <div>
+                {articles.map((article) => (
                   <article
                     key={article.id}
                     onClick={() => handleArticleClick(article.id)}
-                    className="group cursor-pointer transition-all duration-200"
+                    className={styles.listItem}
                   >
-                    <div className="py-4 px-4">
-                      <div className="flex gap-4 mb-3">
-                        {article.cover && (
-                          <div className="flex-shrink-0 w-32 h-24 md:w-40 md:h-28 rounded-md overflow-hidden">
-                            <img
-                              src={article.cover}
-                              alt={article.title}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                        )}
-                        
-                        <div className="flex-1 min-w-0 text-left">
-                          <h3 className="text-lg font-semibold mb-2 line-clamp-2 group-hover:text-primary transition-colors text-left">
-                            {article.title}
-                          </h3>
-                          
-                          <p className="text-muted-foreground text-sm line-clamp-3 leading-relaxed text-left">
-                            {article.summary}
-                          </p>
+                    <div className={styles.listItemInner}>
+                      {article.cover && (
+                        <div className={styles.listItemCover}>
+                          <img
+                            src={article.cover}
+                            alt={article.title}
+                            className={styles.listItemCoverImg}
+                          />
                         </div>
-                      </div>
+                      )}
                       
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                          <span className="font-medium text-foreground/70">{article.author}</span>
-                          
-                          <div className="flex items-center gap-1">
-                            <Heart className="w-3.5 h-3.5" />
-                            <span>{article.likeCount}</span>
-                          </div>
-                        </div>
+                      <div className={styles.listItemContent}>
+                        <h3 className={styles.listItemTitle}>
+                          {article.title}
+                        </h3>
                         
-                        <div className="flex items-center gap-2 flex-wrap">
-                          {article.tags.slice(0, 3).map((tag, tagIndex) => (
-                            <span
-                              key={tagIndex}
-                              className="px-2 py-0.5 bg-muted/50 text-muted-foreground text-xs rounded"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
+                        <p className={styles.listItemSummary}>
+                          {article.summary}
+                        </p>
                       </div>
                     </div>
-                    {index < articles.length - 1 && (
-                      <div className="border-b border-border/20 mx-4" />
-                    )}
+                    
+                    <div className={styles.listItemMeta}>
+                      <div className={styles.listItemAuthor}>
+                        {article.author}
+                      </div>
+                      
+                      <div className={styles.listItemLike}>
+                        <Heart style={{ fontSize: 14 }} />
+                        <span>{article.likeCount}</span>
+                      </div>
+                      
+                      <div className={styles.listItemTags}>
+                        {article.tags.slice(0, 3).map((tag, tagIndex) => (
+                          <span
+                            key={tagIndex}
+                            className={styles.listItemTag}
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   </article>
                 ))}
               </div>
             </div>
 
-            <div ref={observerRef} className="py-8 flex justify-center">
+            <div ref={observerRef} className={styles.loadMore}>
               {isLoading && (
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                <div className={styles.loadMoreLoading}>
+                  <Loader2 style={{ fontSize: 16, animation: 'spin 1s linear infinite' }} />
                   <span className="text-sm">加载中...</span>
                 </div>
               )}
               {!hasMore && articles.length > 0 && (
-                <p className="text-sm text-muted-foreground">已经到底啦~</p>
+                <p className={styles.loadMoreEnd}>已经到底啦~</p>
               )}
             </div>
           </>

@@ -1,3 +1,3 @@
 export * from './quote'
 export * from './article'
-export * from './speaking'
+export type * from './global-type'

@@ -10,7 +10,7 @@ export const articleHandlers = [
     await delay(200)
 
     return HttpResponse.json({
-      code: 20000,
+      code: 0,
       message: '请求成功',
       data: ARTICLE_CATEGORIES,
     })
@@ -27,7 +27,7 @@ export const articleHandlers = [
       .slice(0, limit)
 
     return HttpResponse.json({
-      code: 20000,
+      code: 0,
       message: '请求成功',
       data: latestArticles,
     })
@@ -64,7 +64,7 @@ export const articleHandlers = [
     const paginatedList = sorted.slice(start, end)
 
     return HttpResponse.json({
-      code: 20000,
+      code: 0,
       message: '请求成功',
       data: {
         list: paginatedList,
@@ -89,7 +89,7 @@ export const articleHandlers = [
     }
 
     return HttpResponse.json({
-      code: 20000,
+      code: 0,
       message: '请求成功',
       data: article,
     })

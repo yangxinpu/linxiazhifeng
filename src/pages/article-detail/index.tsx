@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Calendar, User, Heart } from 'lucide-react'
+import { ArrowLeftOutlined as ArrowLeft, CalendarOutlined as Calendar, UserOutlined as User, HeartOutlined as Heart } from '@ant-design/icons'
 import { getArticleById } from '@/api'
 import type { Article } from '@/api'
 import { formatDate } from '@/utils'
 import { useAppStore } from '@/stores'
 import { toast } from 'sonner'
+import styles from './index.module.scss'
 
 export default function ArticleDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -20,7 +21,7 @@ export default function ArticleDetailPage() {
       showLoading()
       try {
         const res = await getArticleById(articleId)
-        if (res.code === 20000 && res.data) {
+        if (res.code === 0 && res.data) {
           setArticle(res.data)
         } else {
           const errorMsg = '文章不存在'
@@ -61,12 +62,12 @@ export default function ArticleDetailPage() {
 
   if (error) {
     return (
-      <section className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4 text-destructive">{error}</h1>
+      <section className={styles.errorPage}>
+        <div>
+          <h1 className={styles.errorPageTitle}>{error}</h1>
           <button
             onClick={() => navigate('/articles')}
-            className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+            className={styles.errorPageBtn}
           >
             返回文章列表
           </button>
@@ -77,12 +78,12 @@ export default function ArticleDetailPage() {
 
   if (!article) {
     return (
-      <section className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">文章不存在</h1>
+      <section className={styles.errorPage}>
+        <div>
+          <h1 className={styles.errorPageTitle}>文章不存在</h1>
           <button
             onClick={() => navigate('/articles')}
-            className="text-primary hover:underline"
+            className={styles.errorPageBtn}
           >
             返回文章列表
           </button>
@@ -92,79 +93,73 @@ export default function ArticleDetailPage() {
   }
 
   return (
-    <section className="min-h-screen bg-background">
-      <div className="sticky top-14 z-40 bg-background/95 backdrop-blur-sm border-b border-border/20">
-        <div className="max-w-4xl mx-auto px-6 py-3">
+    <section className={styles.section}>
+      <div className={styles.backBar}>
+        <div className={styles.backBarInner}>
           <button
             onClick={() => navigate('/articles')}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-all"
+            className={styles.backBtn}
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft style={{ fontSize: 16 }} />
             <span>返回列表</span>
           </button>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        <article className="bg-card rounded-xl shadow-sm border border-border/40 p-8 md:p-12">
-          <header className="mb-8">
-            <div className="flex flex-wrap gap-2 mb-4">
+      <div className={styles.articleCard}>
+        <article className={styles.articleBody}>
+          <header>
+            <div className={styles.tagRow}>
               {article.tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="px-2.5 py-1 bg-primary/10 text-primary text-xs rounded-md font-medium"
+                  className={styles.tag}
                 >
                   {tag}
                 </span>
               ))}
             </div>
 
-            <h1 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
+            <h1 className={styles.title}>
               {article.title}
             </h1>
 
-            <div className="flex items-center gap-6 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                  <User className="w-4 h-4 text-primary" />
+            <div className={styles.meta}>
+              <div className={styles.metaAuthor}>
+                <div className={styles.metaAvatar}>
+                  <User style={{ fontSize: 16 }} />
                 </div>
-                <div>
-                  <div className="font-medium text-foreground">{article.author}</div>
-                </div>
+                <div className={styles.metaAuthorName}>{article.author}</div>
               </div>
 
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
+              <div className={styles.metaItem}>
+                <Calendar style={{ fontSize: 16 }} />
                 <span>{formatDate(article.createdAt, { monthFormat: 'long' })}</span>
               </div>
 
-              <div className="flex items-center gap-2">
-                <Heart className="w-4 h-4" />
+              <div className={styles.metaItem}>
+                <Heart style={{ fontSize: 16 }} />
                 <span>{article.likeCount}</span>
               </div>
             </div>
           </header>
 
           {article.cover && (
-            <div className="relative w-full h-48 md:h-64 rounded-lg overflow-hidden mb-8">
+            <div className={styles.cover}>
               <img
                 src={article.cover}
                 alt={article.title}
-                className="w-full h-full object-cover"
+                className={styles.coverImg}
               />
             </div>
           )}
 
-          <div className="mb-8 pb-8 border-b border-border/20">
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              {article.summary}
-            </p>
+          <div className={styles.summary}>
+            {article.summary}
           </div>
 
-          <div className="prose prose-neutral max-w-none">
-            <div className="text-foreground leading-relaxed whitespace-pre-line text-base">
-              {article.content}
-            </div>
+          <div className={styles.content}>
+            {article.content}
           </div>
         </article>
       </div>
