@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { getLatestQuotes } from '@/api'
-import type { Quote } from '@/types/api'
+import type { Quote } from '@/api'
 
 /** 叶片球面坐标点 */
 interface LeafPoint {

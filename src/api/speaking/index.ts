@@ -1,5 +1,8 @@
-import { get } from '../https'
-import type { SpeakingBook, SpeakingBookDetail, SpeakingArticle, PaginatedResponse, ApiResponse } from '@/types/api'
+export type * from './type'
+
+import { get } from '../http-client'
+import type { SpeakingBook, SpeakingBookDetail, SpeakingArticle } from './type'
+import type { PaginatedResponse, ApiResponse } from '@/types/api'
 
 export const getSpeakingBooks = async (params?: { 
   page?: number

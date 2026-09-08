@@ -10,7 +10,7 @@ import {
   Tag
 } from 'lucide-react'
 import { getSpeakingBookById } from '@/api'
-import type { SpeakingBookDetail } from '@/types/api'
+import type { SpeakingBookDetail } from '@/api'
 import { useAppStore } from '@/stores'
 import { toast } from 'sonner'
 

@@ -8,7 +8,7 @@ import {
   Sparkles
 } from 'lucide-react'
 import { getSpeakingBooks } from '@/api'
-import type { SpeakingBook } from '@/types/api'
+import type { SpeakingBook } from '@/api'
 import { useAppStore } from '@/stores'
 import { toast } from 'sonner'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'

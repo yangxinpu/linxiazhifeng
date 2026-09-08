@@ -1,3 +1,3 @@
-export * from './service/quote.service'
-export * from './service/article.service'
-export * from './service/speaking.service'
+export * from './quote'
+export * from './article'
+export * from './speaking'

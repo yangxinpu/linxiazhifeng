@@ -6,7 +6,7 @@ import {
   Loader2
 } from 'lucide-react'
 import { getArticleList } from '@/api'
-import type { Article } from '@/types/api'
+import type { Article } from '@/api'
 import { useAppStore } from '@/stores'
 import { toast } from 'sonner'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'

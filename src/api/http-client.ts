@@ -1,7 +1,7 @@
 import axios from 'axios'
 import type { AxiosRequestConfig } from 'axios'
 import type { ApiResponse } from '@/types/api'
-import { isBusinessSuccess, getStatusMessage, toBusinessCode } from './status_code_map'
+import { isBusinessSuccess, getStatusMessage, toBusinessCode } from './status-code-map'
 
 const request = axios.create({
   baseURL: '/api',
