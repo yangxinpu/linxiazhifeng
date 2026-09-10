@@ -1,55 +1,121 @@
+@keyframes swayLeft {
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: rotate(-3deg) scale(1.02);
+  }
+}
+
+@keyframes swayRight {
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: rotate(3deg) scale(0.98);
+  }
+}
+
 .root {
-  min-height: 100vh;
   display: flex;
-  flex-direction: column;
+  min-height: 100vh;
   align-items: center;
   justify-content: center;
-  background: var(--background);
+  flex-direction: column;
+  padding: 48px 24px;
   color: var(--foreground);
-  padding: 0 24px;
+  background: var(--background);
 }
 
 .logoRow {
   display: flex;
   align-items: center;
-  gap: 0;
-  margin-bottom: 48px;
+  justify-content: center;
+  margin-bottom: 24px;
 }
 
 .logoSvg {
-  width: 128px;
-  height: 128px;
+  width: 112px;
+  height: 112px;
+
+  &:not(:first-child) {
+    margin-left: -16px;
+  }
+}
+
+.logoPiece {
+  transform-origin: 100px 100px;
+}
+
+.logoLeft,
+.logoLeftSmall {
+  animation: swayLeft 3s ease-in-out infinite;
+}
+
+.logoRight,
+.logoRightSmall {
+  animation: swayRight 3s ease-in-out infinite;
+}
+
+.logoLeftAlt {
+  animation: swayRight 3s ease-in-out infinite;
+}
+
+.logoRightAlt {
+  animation: swayLeft 3s ease-in-out infinite;
 }
 
 .content {
-  text-align: center;
   display: flex;
+  align-items: center;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
+  text-align: center;
+}
+
+.title {
+  color: var(--foreground);
+  font-family: var(--font-quote);
+  font-size: 48px;
+  line-height: 1;
 }
 
 .desc {
-  color: var(--muted-foreground);
-  font-size: 18px;
   max-width: 448px;
-  margin: 0 auto;
+  color: var(--muted-foreground);
+  font-size: 16px;
 }
 
 .btnRow {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 16px;
+  margin-top: 8px;
 }
 
 .btn {
   position: relative;
   display: inline-flex;
+  min-width: 140px;
+  min-height: 44px;
   align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  color: var(--highlight);
+  justify-content: center;
+  color: var(--foreground);
   font-weight: 500;
+  transition: color 160ms ease, transform 160ms ease;
+
+  &:hover {
+    color: var(--primary);
+    transform: translateY(-2px);
+
+    .btnAnimatedStroke {
+      stroke-dashoffset: 0;
+    }
+  }
 }
 
 .btnSvg {
@@ -59,10 +125,35 @@
   height: 100%;
 }
 
+.btnBaseStroke {
+  color: color-mix(in srgb, var(--muted-foreground) 35%, transparent);
+}
+
+.btnAnimatedStroke {
+  stroke-dasharray: 360;
+  stroke-dashoffset: 360;
+  transition: stroke-dashoffset 300ms ease;
+}
+
 .btnContent {
   position: relative;
-  z-index: 10;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.btnIcon {
+  font-size: 16px;
+}
+
+@media (max-width: 639px) {
+  .logoSvg {
+    width: 88px;
+    height: 88px;
+
+    &:not(:first-child) {
+      margin-left: -12px;
+    }
+  }
 }

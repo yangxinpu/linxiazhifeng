@@ -5,7 +5,7 @@ import { getQuoteDetail, getCategories } from '@/api'
 import type { QuoteDetail } from '@/api'
 import type { Category } from '@/api'
 import { formatDate } from '@/utils'
-import { useAppStore } from '@/stores'
+import { useAppLoading } from '@/hooks'
 import { toast } from 'sonner'
 import logo from '@/assets/images/logo.png'
 import styles from './index.module.scss'
@@ -13,7 +13,7 @@ import styles from './index.module.scss'
 export default function QuoteDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { showLoading, hideLoading } = useAppStore()
+  const { showLoading, hideLoading } = useAppLoading()
   const [quote, setQuote] = useState<QuoteDetail | null>(null)
   const [categories, setCategories] = useState<Category[]>([])
   const [error, setError] = useState<string | null>(null)
@@ -61,6 +61,7 @@ export default function QuoteDetailPage() {
         <div>
           <h1 className={styles.errorPageTitle}>{error}</h1>
           <button
+            type="button"
             onClick={() => navigate('/quotes')}
             className={styles.errorPageBtn}
           >
@@ -77,6 +78,7 @@ export default function QuoteDetailPage() {
         <div>
           <h1 className={styles.errorPageTitle}>名言不存在</h1>
           <button
+            type="button"
             onClick={() => navigate('/quotes')}
             className={styles.errorPageBtn}
           >
@@ -94,10 +96,11 @@ export default function QuoteDetailPage() {
       <div className={styles.backBar}>
         <div className={styles.backBarInner}>
           <button
+            type="button"
             onClick={() => navigate('/quotes')}
             className={styles.backBtn}
           >
-            <ArrowLeft style={{ fontSize: 16 }} />
+            <ArrowLeft className={styles.backIcon} />
             <span>返回列表</span>
           </button>
         </div>
@@ -111,7 +114,7 @@ export default function QuoteDetailPage() {
             </div>
           </header>
 
-          <Quote style={{ fontSize: 32, marginBottom: 24, opacity: 0.3 }} />
+          <Quote className={styles.quoteIcon} aria-hidden="true" />
 
           <h1 className={styles.quoteContent}>
             {quote.content}
@@ -122,16 +125,16 @@ export default function QuoteDetailPage() {
           <div className={styles.meta}>
             <div className={styles.metaAuthor}>
               <div className={styles.metaAvatar}>
-                <User style={{ fontSize: 16 }} />
+                <User className={styles.metaIcon} />
               </div>
               <div>
                 <div className={styles.metaAuthorName}>{quote.author}</div>
-                {quote.source && <div style={{ fontSize: 12, opacity: 0.7 }}>{quote.source}</div>}
+                {quote.source && <div className={styles.metaSource}>{quote.source}</div>}
               </div>
             </div>
 
             <div className={styles.metaItem}>
-              <BookOpen style={{ fontSize: 16 }} />
+              <BookOpen className={styles.metaIcon} />
               <span>{formatDate(quote.createdAt)}</span>
             </div>
           </div>
@@ -142,12 +145,10 @@ export default function QuoteDetailPage() {
             </div>
           )}
 
-          {logo && (
-            <div style={{ marginTop: 32, paddingTop: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, opacity: 0.6 }}>
-              <img src={logo} alt="GroveGrace" style={{ width: 24, height: 24 }} />
-              <span style={{ fontSize: 14 }}>GroveGrace</span>
-            </div>
-          )}
+          <div className={styles.brandSignature}>
+            <img src={logo} alt="" className={styles.brandLogo} />
+            <span className={styles.brandName}>GroveGrace</span>
+          </div>
         </article>
       </div>
     </section>

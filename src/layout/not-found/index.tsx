@@ -1,11 +1,11 @@
 import { ArrowLeftOutlined as ArrowLeft } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
-import styles from "./index.module.scss"
+import styles from './index.module.scss'
 
 export default function NotFound() {
   return (
     <section className={styles.root}>
-      <div className={styles.logoRow}>
+      <div className={styles.logoRow} aria-hidden="true">
         <svg viewBox="0 0 200 200" className={styles.logoSvg}>
           <defs>
             <linearGradient id="blueGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -21,7 +21,7 @@ export default function NotFound() {
             </filter>
           </defs>
 
-          <g className="logo-left" style={{ transformOrigin: '100px 100px' }}>
+          <g className={`${styles.logoPiece} ${styles.logoLeft}`}>
             <path
               d="M80 60 L120 50 L120 120 L90 140 L60 150 L70 80 Z"
               fill="url(#blueGradient1)"
@@ -29,7 +29,7 @@ export default function NotFound() {
             />
           </g>
 
-          <g className="logo-right" style={{ transformOrigin: '100px 100px' }}>
+          <g className={`${styles.logoPiece} ${styles.logoRight}`}>
             <path
               d="M140 80 L160 150 L130 160 L100 100 L130 70 Z"
               fill="url(#greenGradient1)"
@@ -53,7 +53,7 @@ export default function NotFound() {
             </filter>
           </defs>
 
-          <g className="logo-left-2" style={{ transformOrigin: '100px 100px' }}>
+          <g className={`${styles.logoPiece} ${styles.logoLeftAlt}`}>
             <path
               d="M80 60 L120 50 L120 120 L90 140 L60 150 L70 80 Z"
               fill="url(#blueGradient2)"
@@ -61,7 +61,7 @@ export default function NotFound() {
             />
           </g>
 
-          <g className="logo-right-2" style={{ transformOrigin: '100px 100px' }}>
+          <g className={`${styles.logoPiece} ${styles.logoRightAlt}`}>
             <path
               d="M140 80 L160 150 L130 160 L100 100 L130 70 Z"
               fill="url(#greenGradient2)"
@@ -85,7 +85,7 @@ export default function NotFound() {
             </filter>
           </defs>
 
-          <g className="logo-left-3" style={{ transformOrigin: '100px 100px' }}>
+          <g className={`${styles.logoPiece} ${styles.logoLeftSmall}`}>
             <path
               d="M80 60 L120 50 L120 120 L90 140 L60 150 L70 80 Z"
               fill="url(#blueGradient3)"
@@ -93,7 +93,7 @@ export default function NotFound() {
             />
           </g>
 
-          <g className="logo-right-3" style={{ transformOrigin: '100px 100px' }}>
+          <g className={`${styles.logoPiece} ${styles.logoRightSmall}`}>
             <path
               d="M140 80 L160 150 L130 160 L100 100 L130 70 Z"
               fill="url(#greenGradient3)"
@@ -104,6 +104,7 @@ export default function NotFound() {
       </div>
 
       <div className={styles.content}>
+        <h1 className={styles.title}>404</h1>
         <p className={styles.desc}>
           您寻找的页面似乎在森林中迷失了方向
         </p>
@@ -111,7 +112,7 @@ export default function NotFound() {
         <div className={styles.btnRow}>
           <Link
             to="/"
-            className={`${styles.btn} group`}
+            className={styles.btn}
           >
             <svg className={styles.btnSvg} viewBox="0 0 140 44" preserveAspectRatio="none">
               <defs>
@@ -133,7 +134,7 @@ export default function NotFound() {
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.5"
-                className="text-muted-foreground/30"
+                className={styles.btnBaseStroke}
               />
               <rect
                 x="1"
@@ -145,12 +146,12 @@ export default function NotFound() {
                 fill="none"
                 stroke="url(#btnGradient)"
                 strokeWidth="1.5"
-                className="btn-stroke"
+                className={styles.btnAnimatedStroke}
                 filter="url(#btnShadow)"
               />
             </svg>
             <span className={styles.btnContent}>
-              <ArrowLeft style={{ fontSize: 16 }} />
+              <ArrowLeft className={styles.btnIcon} />
               返回首页
             </span>
           </Link>

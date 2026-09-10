@@ -1,28 +1,25 @@
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { MessageOutlined as QuoteIcon, CalendarOutlined as Calendar, RightOutlined as ChevronRight, LoadingOutlined as Loader2 } from '@ant-design/icons'
 import { getQuoteList, getLatestQuotes, getCategories } from '@/api'
 import type { Quote as QuoteType } from '@/api'
 import type { Category } from '@/api'
-import { useAppStore } from '@/stores'
+import { useAppLoading } from '@/hooks'
 import { toast } from 'sonner'
 import { formatDate } from '@/utils'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
-import { VirtualList } from '@/components/VirtualList'
 import styles from './index.module.scss'
 
 /** 名言列表页面 */
 export default function Quote() {
   const navigate = useNavigate()
-  const { showLoading, hideLoading } = useAppStore()
+  const { showLoading, hideLoading } = useAppLoading()
   const [latestQuote, setLatestQuote] = useState<QuoteType | null>(null)
   const [quotes, setQuotes] = useState<QuoteType[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [category, setCategory] = useState('')
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
-  const [isSticky, setIsSticky] = useState(false)
-  const categoryRef = useRef<HTMLDivElement>(null)
   const pageSize = 6
 
   const hasMore = quotes.length < total
@@ -51,22 +48,6 @@ export default function Quote() {
     hasMore,
     threshold: 300,
   })
-
-  /** 监听滚动，控制分类选项粘性定位 */
-  useEffect(() => {
-    function handleScroll() {
-      if (categoryRef.current) {
-        const rect = categoryRef.current.getBoundingClientRect()
-        const headerHeight = 56
-        const isFixed = rect.top <= headerHeight + 1
-        setIsSticky(isFixed)
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
 
   /** 获取分类选项 */
   useEffect(() => {
@@ -135,6 +116,14 @@ export default function Quote() {
   const renderQuoteItem = useCallback((quote: QuoteType) => (
     <article
       onClick={() => handleQuoteClick(quote.id)}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
+          handleQuoteClick(quote.id)
+        }
+      }}
+      role="link"
+      tabIndex={0}
       className={styles.quoteCard}
     >
       <div className={styles.quoteCardRow}>
@@ -153,7 +142,7 @@ export default function Quote() {
         <div className={styles.quoteCardMeta}>
           <span className={styles.quoteCardAuthor}>{quote.author}</span>
           <span className={styles.quoteCardDate}>
-            <Calendar style={{ fontSize: 12 }} />
+            <Calendar className={styles.quoteCardDateIcon} />
             {formatDate(quote.createdAt)}
           </span>
         </div>
@@ -172,6 +161,14 @@ export default function Quote() {
           <header
             className={styles.hero}
             onClick={() => handleQuoteClick(latestQuote.id)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault()
+                handleQuoteClick(latestQuote.id)
+              }
+            }}
+            role="link"
+            tabIndex={0}
           >
             <h1 className={styles.heroTitle}>
               {latestQuote.content}
@@ -182,18 +179,14 @@ export default function Quote() {
           </header>
         )}
 
-        <div 
-          ref={categoryRef}
-          className={styles.categoryBar}
-        >
-          <div 
-            className={styles.categoryBarInner}
-            style={{ justifyContent: isSticky ? 'flex-end' : 'center' }}
-          >
+        <div className={styles.categoryBar}>
+          <div className={styles.categoryBarInner}>
             {categories.map((option) => (
               <button
+                type="button"
                 key={option.value}
                 onClick={() => handleCategoryChange(option.value)}
+                aria-pressed={category === option.value}
                 className={`${styles.categoryBtn} ${category === option.value ? styles.categoryBtnActive : ''}`}
               >
                 {option.label}
@@ -209,20 +202,17 @@ export default function Quote() {
           </div>
         ) : (
           <>
-            <div style={{ height: 'calc(100vh - 400px)' }}>
-              <VirtualList
-                items={quotes}
-                itemHeight={140}
-                renderItem={renderQuoteItem}
-                overscan={5}
-              />
+            <div className={styles.quoteList}>
+              {quotes.map((quote) => (
+                <div key={quote.id}>{renderQuoteItem(quote)}</div>
+              ))}
             </div>
 
             <div ref={observerRef} className={styles.loadMore}>
               {isLoading && (
                 <div className={styles.loadMoreLoading}>
-                  <Loader2 style={{ fontSize: 16, animation: 'spin 1s linear infinite' }} />
-                  <span style={{ fontSize: 14 }}>加载中...</span>
+                  <Loader2 className={styles.loadingIcon} />
+                  <span className={styles.loadingText}>加载中...</span>
                 </div>
               )}
               {!hasMore && quotes.length > 0 && (

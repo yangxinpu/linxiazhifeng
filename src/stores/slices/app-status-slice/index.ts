@@ -28,7 +28,4 @@ export const appStatusSlice = createSlice({
   },
 })
 
-export const isLoadingSelector = (state: AppStatusState) => state.isLoading
-export const themeSelector = (state: AppStatusState) => state.theme
-
 export const { showLoading, hideLoading, setTheme } = appStatusSlice.actions

@@ -1,7 +1,6 @@
 import { Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { useAppStore } from '@/stores'
-import { useTheme } from '@/hooks/useTheme'
+import { useAppLoading } from '@/hooks'
 import Loading from '@/layout/loading'
 import NotFound from '@/layout/not-found'
 
@@ -13,8 +12,7 @@ const Article = lazy(() => import('@/pages/article'))
 const ArticleDetail = lazy(() => import('@/pages/article-detail'))
 
 export default function App() {
-  useTheme()
-  const { isLoading, hideLoading } = useAppStore()
+  const { isLoading, hideLoading } = useAppLoading()
 
   useEffect(() => {
     // 页面加载完成后隐藏加载动画

@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useMemo } from 'react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import { getLatestQuotes } from '@/api'
 import type { Quote } from '@/api'
@@ -192,12 +192,12 @@ export default function Home() {
         <div>
           <div className={styles.header}>
             <div className={styles.quoteBox}>
-              <h1 className={styles.quoteTitle} style={{ fontFamily: 'var(--font-quote)' }}>
+              <h1 className={styles.quoteTitle}>
                 {quoteLines.map((line, i) => (
                   <span
                     key={i}
                     className={styles.quoteLine}
-                    style={{ animation: `reveal-text 0.8s ease-out ${i * 0.4 + 0.2}s both` }}
+                    style={{ '--reveal-delay': `${i * 0.4 + 0.2}s` } as CSSProperties}
                   >
                     {line}{i < quoteLines.length - 1 ? '，' : ''}
                     {i < quoteLines.length - 1 && <br />}
@@ -207,7 +207,7 @@ export default function Home() {
               {quote && (
                 <p
                   className={styles.quoteMeta}
-                  style={{ animation: `fade-in-up 0.3s ease-out ${quoteLines.length * 0.4 + 1}s forwards` }}
+                  style={{ '--meta-delay': `${quoteLines.length * 0.4 + 1}s` } as CSSProperties}
                 >
                   —— {quote.author}《{quote.source}》
                 </p>
@@ -219,8 +219,8 @@ export default function Home() {
             <div className={styles.leftCol}>
               <div className={styles.leftColInner}>
                 <p className={styles.brandRow}>
-                  <span className={styles.brandName} style={{ fontFamily: 'var(--font-quote)' }}>林下之风</span>
-                  <span className={styles.brandDivider}></span>
+                  <span className={styles.brandName}>林下之风</span>
+                  <span className={styles.brandDivider} />
                   <span className={styles.brandEn}>GROVEGRACE</span>
                 </p>
                 <p className={styles.descPrimary}>
@@ -242,12 +242,11 @@ export default function Home() {
 
             <div
               className={styles.canvasWrap}
-              style={{ animation: 'fade-in-up 0.8s ease-out 0.4s forwards' }}
             >
               <canvas
                 ref={canvasRef}
                 className={styles.canvas}
-                style={{ display: 'block' }}
+                aria-label="可拖动旋转的树叶球动画"
               />
             </div>
           </div>

@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom'
 import { BookOutlined as BookOpen, HeartOutlined as Heart, LoadingOutlined as Loader2 } from '@ant-design/icons'
 import { getArticleList } from '@/api'
 import type { Article } from '@/api'
-import { useAppStore } from '@/stores'
+import { useAppLoading } from '@/hooks'
 import { toast } from 'sonner'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
 import styles from './index.module.scss'
 
 export default function Article() {
   const navigate = useNavigate()
-  const { showLoading, hideLoading } = useAppStore()
+  const { showLoading, hideLoading } = useAppLoading()
   const [articles, setArticles] = useState<Article[]>([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
@@ -83,6 +83,14 @@ export default function Article() {
                   <article
                     key={article.id}
                     onClick={() => handleArticleClick(article.id)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault()
+                        handleArticleClick(article.id)
+                      }
+                    }}
+                    role="link"
+                    tabIndex={0}
                     className={styles.listItem}
                   >
                     <div className={styles.listItemInner}>
@@ -113,7 +121,7 @@ export default function Article() {
                       </div>
                       
                       <div className={styles.listItemLike}>
-                        <Heart style={{ fontSize: 14 }} />
+                        <Heart className={styles.listItemLikeIcon} />
                         <span>{article.likeCount}</span>
                       </div>
                       
@@ -136,8 +144,8 @@ export default function Article() {
             <div ref={observerRef} className={styles.loadMore}>
               {isLoading && (
                 <div className={styles.loadMoreLoading}>
-                  <Loader2 style={{ fontSize: 16, animation: 'spin 1s linear infinite' }} />
-                  <span className="text-sm">加载中...</span>
+                  <Loader2 className={styles.loadingIcon} />
+                  <span className={styles.loadingText}>加载中...</span>
                 </div>
               )}
               {!hasMore && articles.length > 0 && (

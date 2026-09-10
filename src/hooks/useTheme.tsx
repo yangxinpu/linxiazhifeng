@@ -1,7 +1,14 @@
-import { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import type { AppDispatch } from '@/stores/index'
-import { setTheme as setThemeAction, themeSelector } from '@/stores/slices/app-status-slice'
+import { useCallback, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import type { AppDispatch, RootState } from '@/stores'
+import { setTheme as setThemeAction, type ThemeMode } from '@/stores/slices/app-status-slice'
+
+const THEME_STORAGE_KEY = 'linxiazhifeng-theme'
+
+/** 判断本地存储值是否为有效主题。 */
+function isThemeMode(value: string | null): value is ThemeMode {
+  return value === 'dark' || value === 'light'
+}
 
 /**
  * 主题管理 Hook
@@ -10,29 +17,41 @@ import { setTheme as setThemeAction, themeSelector } from '@/stores/slices/app-s
  * - 返回 { theme, resolved, setTheme, toggleTheme }
  */
 export function useTheme() {
-  const theme = useSelector(themeSelector)
+  const theme = useSelector((state: RootState) => state.appStatus.theme)
   const dispatch = useDispatch<AppDispatch>()
 
-  // 初始化：读取本地存储 / 系统偏好
-  useEffect(() => {
-    const saved = localStorage.getItem('theme') as 'dark' | 'light' | null
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    const initial: 'dark' | 'light' = saved ?? (prefersDark ? 'dark' : 'light')
-    dispatch(setThemeAction(initial))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  /** 设置当前主题。 */
+  const setTheme = useCallback((nextTheme: ThemeMode) => {
+    dispatch(setThemeAction(nextTheme))
+  }, [dispatch])
 
-  // 同步到 DOM + localStorage
+  /** 在深色与浅色主题之间切换。 */
+  const toggleTheme = useCallback(() => {
+    dispatch(setThemeAction(theme === 'dark' ? 'light' : 'dark'))
+  }, [dispatch, theme])
+
+  // 首次挂载时恢复用户主题偏好。
+  useEffect(() => {
+    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY)
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const initialTheme = isThemeMode(savedTheme)
+      ? savedTheme
+      : prefersDark ? 'dark' : 'light'
+
+    dispatch(setThemeAction(initialTheme))
+  }, [dispatch])
+
+  // 保持 DOM 主题和持久化值与 Redux 状态一致。
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark')
     document.documentElement.setAttribute('data-theme', theme)
-    localStorage.setItem('theme', theme)
+    localStorage.setItem(THEME_STORAGE_KEY, theme)
   }, [theme])
 
   return {
     theme,
     resolved: theme,
-    setTheme: (t: 'dark' | 'light') => dispatch(setThemeAction(t)),
-    toggleTheme: () => dispatch(setThemeAction(theme === 'dark' ? 'light' : 'dark')),
+    setTheme,
+    toggleTheme,
   }
 }

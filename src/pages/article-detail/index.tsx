@@ -4,14 +4,14 @@ import { ArrowLeftOutlined as ArrowLeft, CalendarOutlined as Calendar, UserOutli
 import { getArticleById } from '@/api'
 import type { Article } from '@/api'
 import { formatDate } from '@/utils'
-import { useAppStore } from '@/stores'
+import { useAppLoading } from '@/hooks'
 import { toast } from 'sonner'
 import styles from './index.module.scss'
 
 export default function ArticleDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { showLoading, hideLoading } = useAppStore()
+  const { showLoading, hideLoading } = useAppLoading()
   const [article, setArticle] = useState<Article | null>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -66,6 +66,7 @@ export default function ArticleDetailPage() {
         <div>
           <h1 className={styles.errorPageTitle}>{error}</h1>
           <button
+            type="button"
             onClick={() => navigate('/articles')}
             className={styles.errorPageBtn}
           >
@@ -82,6 +83,7 @@ export default function ArticleDetailPage() {
         <div>
           <h1 className={styles.errorPageTitle}>文章不存在</h1>
           <button
+            type="button"
             onClick={() => navigate('/articles')}
             className={styles.errorPageBtn}
           >
@@ -97,10 +99,11 @@ export default function ArticleDetailPage() {
       <div className={styles.backBar}>
         <div className={styles.backBarInner}>
           <button
+            type="button"
             onClick={() => navigate('/articles')}
             className={styles.backBtn}
           >
-            <ArrowLeft style={{ fontSize: 16 }} />
+            <ArrowLeft className={styles.backIcon} />
             <span>返回列表</span>
           </button>
         </div>
@@ -127,18 +130,18 @@ export default function ArticleDetailPage() {
             <div className={styles.meta}>
               <div className={styles.metaAuthor}>
                 <div className={styles.metaAvatar}>
-                  <User style={{ fontSize: 16 }} />
+                  <User className={styles.metaIcon} />
                 </div>
                 <div className={styles.metaAuthorName}>{article.author}</div>
               </div>
 
               <div className={styles.metaItem}>
-                <Calendar style={{ fontSize: 16 }} />
+                <Calendar className={styles.metaIcon} />
                 <span>{formatDate(article.createdAt, { monthFormat: 'long' })}</span>
               </div>
 
               <div className={styles.metaItem}>
-                <Heart style={{ fontSize: 16 }} />
+                <Heart className={styles.metaIcon} />
                 <span>{article.likeCount}</span>
               </div>
             </div>

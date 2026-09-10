@@ -1,0 +1,11 @@
+.footer {
+  &:global(.ant-layout-footer) {
+    width: 100%;
+    padding: 24px var(--layout-gutter);
+    border-top: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+    color: var(--muted-foreground);
+    background: var(--background);
+    font-size: 12px;
+    text-align: center;
+  }
+}
