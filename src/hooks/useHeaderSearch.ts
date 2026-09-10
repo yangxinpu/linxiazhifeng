@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { getSearchResults } from '@/api'
 import type { SearchResult } from '@/api'
 
-const SEARCH_HISTORY_STORAGE_KEY = 'grovegrace-search-history'
+const SEARCH_HISTORY_STORAGE_KEY = 'Linxiazhifeng-search-history'
 const SEARCH_HISTORY_LIMIT = 8
 const SEARCH_RESULT_LIMIT = 8
 const SEARCH_DEBOUNCE_MS = 180

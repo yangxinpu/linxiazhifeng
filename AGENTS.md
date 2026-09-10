@@ -4,7 +4,7 @@
 
 ## 项目概览
 
-Linxiazhifeng（GroveGrace）是一个中文名言与经典文章阅读前端。
+Linxiazhifeng（Linxiazhifeng）是一个中文名言与经典文章阅读前端。
 
 - 技术栈：React 19、TypeScript 6、Vite 8
 - 路由：React Router 7

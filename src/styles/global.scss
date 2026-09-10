@@ -21,6 +21,8 @@
 html {
   min-width: 320px;
   min-height: 100%;
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
   scroll-behavior: smooth;
   scroll-padding-top: var(--header-height);
 }

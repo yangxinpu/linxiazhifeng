@@ -221,7 +221,7 @@ export default function Home() {
                 <p className={styles.brandRow}>
                   <span className={styles.brandName}>林下之风</span>
                   <span className={styles.brandDivider} />
-                  <span className={styles.brandEn}>GROVEGRACE</span>
+                  <span className={styles.brandEn}>Linxiazhifeng</span>
                 </p>
                 <p className={styles.descPrimary}>
                   一个阅读、提升，以及深化理解的地方

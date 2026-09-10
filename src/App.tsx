@@ -26,6 +26,25 @@ const LIGHT_THEME_TOKENS: NonNullable<ThemeConfig['token']> = {
   colorFillQuaternary: '#f0f4ed',
 }
 
+// 深色模式使用较亮的中性炭灰，降低近黑背景造成的阅读疲劳。
+const DARK_THEME_TOKENS: NonNullable<ThemeConfig['token']> = {
+  colorPrimary: '#43d5aa',
+  colorInfo: '#62a7dd',
+  colorBgBase: '#242625',
+  colorBgLayout: '#242625',
+  colorBgContainer: '#2d302e',
+  colorBgElevated: '#333634',
+  colorTextBase: '#eef0ee',
+  colorText: '#eef0ee',
+  colorTextSecondary: '#b9bfbb',
+  colorBorder: '#454a47',
+  colorBorderSecondary: '#3a3e3b',
+  colorFill: '#3a3e3b',
+  colorFillSecondary: '#353836',
+  colorFillTertiary: '#303331',
+  colorFillQuaternary: '#2b2e2c',
+}
+
 const Main = lazy(() => import('@/layout/main/index'))
 const Home = lazy(() => import('@/pages/home'))
 const Quote = lazy(() => import('@/pages/quote'))
@@ -41,7 +60,7 @@ export default function App() {
     algorithm: themeMode === 'dark'
       ? antdTheme.darkAlgorithm
       : antdTheme.defaultAlgorithm,
-    token: themeMode === 'dark' ? undefined : LIGHT_THEME_TOKENS,
+    token: themeMode === 'dark' ? DARK_THEME_TOKENS : LIGHT_THEME_TOKENS,
   }), [themeMode])
 
   useEffect(() => {

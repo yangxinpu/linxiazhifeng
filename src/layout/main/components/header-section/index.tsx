@@ -69,8 +69,13 @@ export default function HeaderSection() {
       <div className={styles.headerInner}>
         <div className={styles.brandGroup}>
           <Link to="/" className={styles.logoLink}>
-            <img src={logo} alt="GroveGrace Logo" className={styles.logoImg} />
-            <span className={styles.logoText}>GroveGrace</span>
+            <img src={logo} alt="Linxiazhifeng Logo" className={styles.logoImg} />
+            <span className={styles.logoText}>
+              <span className={styles.logoTextPrimary}>Lin</span>
+              <span>xia</span>
+              <span className={styles.logoTextTertiary}>zhi</span>
+              <span>feng</span>
+            </span>
           </Link>
         </div>
 

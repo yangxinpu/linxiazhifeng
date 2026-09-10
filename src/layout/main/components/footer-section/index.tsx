@@ -7,7 +7,7 @@ const { Footer } = Layout
 export default function FooterSection() {
   return (
     <Footer className={styles.footer}>
-      © {new Date().getFullYear()} GroveGrace
+      © {new Date().getFullYear()} Linxiazhifeng
     </Footer>
   )
 }

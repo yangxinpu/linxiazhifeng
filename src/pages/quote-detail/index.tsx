@@ -165,7 +165,7 @@ export default function QuoteDetailPage() {
 
           <div className={styles.brandSignature}>
             <img src={logo} alt="" className={styles.brandLogo} />
-            <span className={styles.brandName}>GroveGrace</span>
+            <span className={styles.brandName}>Linxiazhifeng</span>
           </div>
         </article>
       </div>
