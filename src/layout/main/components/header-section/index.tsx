@@ -8,7 +8,7 @@ import {
   MessageOutlined as Quote,
 } from '@ant-design/icons'
 import { Avatar, Button, Layout, Menu, Tooltip, type MenuProps } from 'antd'
-import logo from '@/assets/images/logo.png'
+import logo from '@/assets/images/Linxiazhifeng.png'
 import {
   DEFAULT_PROFILE_AVATAR_URL,
   PROFILE_AVATAR_UPDATED_EVENT,

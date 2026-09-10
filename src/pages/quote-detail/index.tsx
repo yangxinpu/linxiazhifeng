@@ -7,7 +7,7 @@ import type { Category } from '@/api'
 import { formatDate } from '@/utils'
 import PageSkeleton from '@/components/page-skeleton'
 import { toast } from 'sonner'
-import logo from '@/assets/images/logo.png'
+import logo from '@/assets/images/Linxiazhifeng.png'
 import styles from './index.module.scss'
 
 export default function QuoteDetailPage() {
