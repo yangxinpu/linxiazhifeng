@@ -1,7 +1,7 @@
 // src/hooks/useRequest.ts
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { message } from 'antd'
-import { RequestError } from '../api/http-error'
+import { RequestError } from '../../api/http-error'
 
 // 请求函数类型
 type RequestFn<P extends unknown[], D> = (...params: P) => Promise<D>

@@ -5,7 +5,7 @@ import { getArticleList } from '@/api'
 import type { Article } from '@/api'
 import PageSkeleton from '@/components/page-skeleton'
 import { toast } from 'sonner'
-import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
+import { useInfiniteScroll } from '@/hooks/use-infinite-scroll'
 import styles from './index.module.scss'
 
 export default function Article() {

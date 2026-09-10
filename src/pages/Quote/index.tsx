@@ -7,7 +7,7 @@ import type { Category } from '@/api'
 import PageSkeleton from '@/components/page-skeleton'
 import { toast } from 'sonner'
 import { formatDate } from '@/utils'
-import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
+import { useInfiniteScroll } from '@/hooks/use-infinite-scroll'
 import styles from './index.module.scss'
 
 /** 名言列表页面 */

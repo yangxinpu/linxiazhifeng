@@ -12,7 +12,7 @@ import {
   SearchOutlined as Search,
 } from '@ant-design/icons'
 import { Button, Empty, Input, List, Spin, Tag, Typography, type InputRef } from 'antd'
-import { useHeaderSearch } from '@/hooks'
+import { useHeaderSearch } from '../../hooks/use-header-search'
 import type { SearchResult } from '@/api'
 import styles from './index.module.scss'
 
