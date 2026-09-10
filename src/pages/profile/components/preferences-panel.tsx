@@ -1,5 +1,9 @@
 import { useState } from 'react'
-import { ReadOutlined } from '@ant-design/icons'
+import {
+  MoonOutlined,
+  ReadOutlined,
+  SunOutlined,
+} from '@ant-design/icons'
 import {
   Button,
   Card,
@@ -11,6 +15,7 @@ import {
   Typography,
 } from 'antd'
 import type { ProfilePreferences, UserProfile } from '@/api'
+import { useTheme } from '@/hooks'
 import styles from '../index.module.scss'
 
 const { Text } = Typography
@@ -49,6 +54,7 @@ export default function PreferencesPanel({
   isSaving,
   onSavePreferences,
 }: PreferencesPanelProps) {
+  const { resolved, setTheme } = useTheme()
   const [draftPreferences, setDraftPreferences] = useState<ProfilePreferences>(() => ({
     ...profile.preferences,
     preferredCategories: [...profile.preferences.preferredCategories],
@@ -90,6 +96,23 @@ export default function PreferencesPanel({
       className={`${styles.panelCard} ${styles.preferenceCard}`}
     >
       <div className={styles.preferenceList}>
+        <div className={styles.preferenceRow}>
+          <div>
+            <Text className={styles.preferenceTitle}>显示主题</Text>
+            <Text className={styles.preferenceDescription}>
+              在护眼浅色与深色模式之间切换
+            </Text>
+          </div>
+          <Switch
+            checked={resolved === 'dark'}
+            checkedChildren={<MoonOutlined className={styles.preferenceThemeIcon} />}
+            unCheckedChildren={<SunOutlined className={styles.preferenceThemeIcon} />}
+            onChange={(isDarkTheme) => setTheme(isDarkTheme ? 'dark' : 'light')}
+            className={styles.preferenceThemeSwitch}
+            aria-label="切换深色或浅色主题"
+          />
+        </div>
+
         <div className={styles.preferenceRow}>
           <div>
             <Text className={styles.preferenceTitle}>每日阅读目标</Text>

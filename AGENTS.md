@@ -39,7 +39,8 @@ pnpm build
 ### 应用入口与路由
 
 - `src/main.tsx` 负责启动 MSW、挂载 Redux Provider 和渲染应用。
-- `src/App.tsx` 负责全局加载状态、懒加载页面和声明路由。
+- `src/App.tsx` 负责应用启动阶段的全局骨架屏和路由声明。
+- `src/layout/main/index.tsx` 负责页面懒加载的局部骨架屏，页面请求不得遮挡 Header 或 Footer。
 - 页面默认通过 `React.lazy` 加载。
 - 主布局使用嵌套路由和 `Outlet`，不要在页面中重复实现全局 Header 或 Footer。
 

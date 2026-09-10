@@ -1,5 +1,7 @@
+import { Suspense } from 'react'
 import { Outlet } from 'react-router-dom'
 import { Layout } from 'antd'
+import PageSkeleton from '@/components/page-skeleton'
 import FooterSection from './components/footer-section'
 import HeaderSection from './components/header-section'
 import styles from './index.module.scss'
@@ -13,7 +15,9 @@ export default function Main() {
       <HeaderSection />
 
       <Content className={styles.main}>
-        <Outlet />
+        <Suspense fallback={<PageSkeleton />}>
+          <Outlet />
+        </Suspense>
       </Content>
 
       <FooterSection />

@@ -6,7 +6,7 @@ import {
 } from '@ant-design/icons'
 import { Button, Card, Result, Skeleton, Tabs, message, type TabsProps } from 'antd'
 import type { EditableProfileFields, ProfilePreferences } from '@/api'
-import { notifyProfileAvatarUpdated } from '@/constants/profile'
+import { notifyProfileAvatarUpdated } from '@/constants/profile-config'
 import CollectionsPanel from './components/collections-panel'
 import OverviewPanel from './components/overview-panel'
 import PreferencesPanel from './components/preferences-panel'

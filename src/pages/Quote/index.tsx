@@ -4,7 +4,7 @@ import { MessageOutlined as QuoteIcon, CalendarOutlined as Calendar, RightOutlin
 import { getQuoteList, getLatestQuotes, getCategories } from '@/api'
 import type { Quote as QuoteType } from '@/api'
 import type { Category } from '@/api'
-import { useAppLoading } from '@/hooks'
+import PageSkeleton from '@/components/page-skeleton'
 import { toast } from 'sonner'
 import { formatDate } from '@/utils'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
@@ -13,11 +13,11 @@ import styles from './index.module.scss'
 /** 名言列表页面 */
 export default function Quote() {
   const navigate = useNavigate()
-  const { showLoading, hideLoading } = useAppLoading()
   const [latestQuote, setLatestQuote] = useState<QuoteType | null>(null)
   const [quotes, setQuotes] = useState<QuoteType[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [category, setCategory] = useState('')
+  const [isPageLoading, setIsPageLoading] = useState(true)
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const pageSize = 6
@@ -83,27 +83,37 @@ export default function Quote() {
 
   /** 获取名言列表（分类改变时重新加载） */
   useEffect(() => {
+    let isActive = true
+
     async function fetchQuotes() {
-      showLoading()
       try {
         const res = await getQuoteList({ page: 1, pageSize, category: category || undefined })
-        if (res.code === 0 && res.data) {
+        if (isActive && res.code === 0 && res.data) {
           setQuotes(res.data.list)
           setTotal(res.data.total)
           setPage(1)
         }
       } catch (error) {
-        console.error('获取名言列表失败:', error)
-        toast.error('获取名言列表失败，请稍后重试')
+        if (isActive) {
+          console.error('获取名言列表失败:', error)
+          toast.error('获取名言列表失败，请稍后重试')
+        }
       } finally {
-        hideLoading()
+        if (isActive) {
+          setIsPageLoading(false)
+        }
       }
     }
-    fetchQuotes()
-  }, [category, showLoading, hideLoading])
+
+    void fetchQuotes()
+    return () => {
+      isActive = false
+    }
+  }, [category])
 
   /** 切换分类时重置页码 */
   const handleCategoryChange = useCallback((newCategory: string) => {
+    setIsPageLoading(true)
     setCategory(newCategory)
   }, [])
 
@@ -153,6 +163,10 @@ export default function Quote() {
       </div>
     </article>
   ), [handleQuoteClick])
+
+  if (isPageLoading) {
+    return <PageSkeleton />
+  }
 
   return (
     <section className={styles.section}>

@@ -1,38 +1,38 @@
 /* 浅色主题及全局设计变量 */
 :root {
   /* 页面与内容颜色 */
-  --background: #f5f5f5;
-  --foreground: #0f0f10;
-  --card: #ffffff;
-  --card-foreground: #0f0f10;
-  --popover: #ffffff;
-  --popover-foreground: #0f0f10;
+  --background: #edf2e8;
+  --foreground: #1f2a24;
+  --card: #f8faf5;
+  --card-foreground: #1f2a24;
+  --popover: #fbfcf8;
+  --popover-foreground: #1f2a24;
 
   /* 品牌与交互颜色 */
-  --primary: #0fd9a6;
+  --primary: #087f65;
   --primary-foreground: #ffffff;
-  --secondary: #e8e8ea;
-  --secondary-foreground: #0f0f10;
-  --accent: rgba(15, 217, 166, 0.1);
-  --accent-foreground: #0fd9a6;
-  --accent-border: rgba(15, 217, 166, 0.5);
-  --brand-a: #0fd9a6;
-  --brand-b: #2b8ae0;
-  --brand-a-hover: #0bc08e;
-  --brand-b-hover: #1a6fc4;
+  --secondary: #e2e9df;
+  --secondary-foreground: #26332b;
+  --accent: rgba(8, 127, 101, 0.1);
+  --accent-foreground: #087f65;
+  --accent-border: rgba(8, 127, 101, 0.42);
+  --brand-a: #087f65;
+  --brand-b: #2675ad;
+  --brand-a-hover: #066b55;
+  --brand-b-hover: #1f6292;
 
   /* 状态与边界颜色 */
-  --muted: #e8e8ea;
-  --muted-foreground: #4a4a52;
+  --muted: #e5ebe2;
+  --muted-foreground: #536058;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
-  --border: #d4d4d8;
-  --input: #d4d4d8;
-  --ring: #19fac6;
-  --code-bg: #e8e8ea;
-  --social-bg: rgba(232, 232, 234, 0.5);
-  --hover: #e0e0e3;
-  --highlight: #18181b;
+  --border: #ccd7ca;
+  --input: #ccd7ca;
+  --ring: #0a8f70;
+  --code-bg: #e2e9df;
+  --social-bg: rgba(226, 233, 223, 0.6);
+  --hover: #dce6da;
+  --highlight: #1f2a24;
 
   /* 字体 */
   --font-quote: 'LXGW WenKai', 'STKaiti', 'KaiTi', serif;
@@ -54,8 +54,8 @@
   --radius-lg: 8px;
 
   /* 阴影与焦点状态 */
-  --shadow-1: 0 1px 2px rgb(0 0 0 / 0.05);
-  --shadow-2: 0 8px 24px rgb(0 0 0 / 0.08);
+  --shadow-1: 0 1px 2px rgb(45 68 53 / 0.08);
+  --shadow-2: 0 8px 24px rgb(45 68 53 / 0.12);
   --focus-ring: 0 0 0 3px color-mix(in srgb, var(--primary) 22%, transparent);
 }
 

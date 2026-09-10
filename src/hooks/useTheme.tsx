@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import type { AppDispatch, RootState } from '@/stores'
-import { setTheme as setThemeAction, type ThemeMode } from '@/stores/slices/app-status-slice'
+import { setTheme as setThemeAction, type ThemeMode } from '@/stores/slices/app-ui-slice'
 
 const THEME_STORAGE_KEY = 'linxiazhifeng-theme'
 
@@ -17,7 +17,7 @@ function isThemeMode(value: string | null): value is ThemeMode {
  * - 返回 { theme, resolved, setTheme, toggleTheme }
  */
 export function useTheme() {
-  const theme = useSelector((state: RootState) => state.appStatus.theme)
+  const theme = useSelector((state: RootState) => state.appUi.theme)
   const dispatch = useDispatch<AppDispatch>()
 
   /** 设置当前主题。 */

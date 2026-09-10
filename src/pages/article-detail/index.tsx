@@ -4,67 +4,70 @@ import { ArrowLeftOutlined as ArrowLeft, CalendarOutlined as Calendar, UserOutli
 import { getArticleById } from '@/api'
 import type { Article } from '@/api'
 import { formatDate } from '@/utils'
-import { useAppLoading } from '@/hooks'
+import PageSkeleton from '@/components/page-skeleton'
 import { toast } from 'sonner'
 import styles from './index.module.scss'
 
 export default function ArticleDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { showLoading, hideLoading } = useAppLoading()
   const [article, setArticle] = useState<Article | null>(null)
+  const [loadedRouteId, setLoadedRouteId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const articleId = Number(id)
+  const routeError = !id
+    ? '缺少文章ID'
+    : Number.isNaN(articleId) || articleId <= 0
+      ? '无效的文章ID'
+      : null
+  const isPageLoading = routeError === null && loadedRouteId !== id
 
   useEffect(() => {
-    async function fetchArticle(articleId: number) {
-      setError(null)
-      showLoading()
+    if (routeError || !id) return
+
+    let isActive = true
+    const requestedRouteId = id
+
+    async function fetchArticle() {
       try {
         const res = await getArticleById(articleId)
-        if (res.code === 0 && res.data) {
+        if (isActive && res.code === 0 && res.data) {
           setArticle(res.data)
-        } else {
+          setError(null)
+        } else if (isActive) {
           const errorMsg = '文章不存在'
           setError(errorMsg)
           toast.error(errorMsg)
         }
       } catch (error) {
-        console.error('获取文章详情失败:', error)
-        const errorMsg = '获取文章详情失败，请稍后重试'
-        setError(errorMsg)
-        toast.error(errorMsg)
-      } finally {
-        hideLoading()
-      }
-    }
-
-    async function init() {
-      if (id) {
-        const articleId = Number(id)
-        if (isNaN(articleId) || articleId <= 0) {
-          const errorMsg = '无效的文章ID'
+        if (isActive) {
+          console.error('获取文章详情失败:', error)
+          const errorMsg = '获取文章详情失败，请稍后重试'
           setError(errorMsg)
           toast.error(errorMsg)
-          hideLoading()
-        } else {
-          await fetchArticle(articleId)
         }
-      } else {
-        const errorMsg = '缺少文章ID'
-        setError(errorMsg)
-        toast.error(errorMsg)
-        hideLoading()
+      } finally {
+        if (isActive) {
+          setLoadedRouteId(requestedRouteId)
+        }
       }
     }
 
-    init()
-  }, [id, showLoading, hideLoading])
+    void fetchArticle()
+    return () => {
+      isActive = false
+    }
+  }, [articleId, id, routeError])
 
-  if (error) {
+  if (isPageLoading) {
+    return <PageSkeleton variant="detail" />
+  }
+
+  if (routeError || error) {
     return (
       <section className={styles.errorPage}>
         <div>
-          <h1 className={styles.errorPageTitle}>{error}</h1>
+          <h1 className={styles.errorPageTitle}>{routeError ?? error}</h1>
           <button
             type="button"
             onClick={() => navigate('/articles')}

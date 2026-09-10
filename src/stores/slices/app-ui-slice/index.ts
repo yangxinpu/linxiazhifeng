@@ -2,8 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 
 export type ThemeMode = 'dark' | 'light'
 
-interface AppStatusState {
-  isLoading: boolean // 全局页面加载状态
+interface AppUiState {
+  globalSkeletonRequestCount: number // 当前需要展示全局骨架屏的请求数量
   theme: ThemeMode // 当前主题模式
 }
 
@@ -14,20 +14,23 @@ function getInitialTheme(): ThemeMode {
     : 'light'
 }
 
-const initialState: AppStatusState = {
-  isLoading: true,
+const initialState: AppUiState = {
+  globalSkeletonRequestCount: 1,
   theme: getInitialTheme(),
 }
 
-export const appStatusSlice = createSlice({
-  name: 'appStatus',
+export const appUiSlice = createSlice({
+  name: 'appUi',
   initialState,
   reducers: {
-    showLoading: (state) => {
-      state.isLoading = true
+    showGlobalSkeleton: (state) => {
+      state.globalSkeletonRequestCount += 1
     },
-    hideLoading: (state) => {
-      state.isLoading = false
+    hideGlobalSkeleton: (state) => {
+      state.globalSkeletonRequestCount = Math.max(
+        0,
+        state.globalSkeletonRequestCount - 1,
+      )
     },
     setTheme: (state, action: { payload: ThemeMode }) => {
       state.theme = action.payload
@@ -35,4 +38,4 @@ export const appStatusSlice = createSlice({
   },
 })
 
-export const { showLoading, hideLoading, setTheme } = appStatusSlice.actions
+export const { showGlobalSkeleton, hideGlobalSkeleton, setTheme } = appUiSlice.actions

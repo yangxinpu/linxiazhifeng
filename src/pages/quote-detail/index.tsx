@@ -5,7 +5,7 @@ import { getQuoteDetail, getCategories } from '@/api'
 import type { QuoteDetail } from '@/api'
 import type { Category } from '@/api'
 import { formatDate } from '@/utils'
-import { useAppLoading } from '@/hooks'
+import PageSkeleton from '@/components/page-skeleton'
 import { toast } from 'sonner'
 import logo from '@/assets/images/logo.png'
 import styles from './index.module.scss'
@@ -13,53 +13,71 @@ import styles from './index.module.scss'
 export default function QuoteDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { showLoading, hideLoading } = useAppLoading()
   const [quote, setQuote] = useState<QuoteDetail | null>(null)
   const [categories, setCategories] = useState<Category[]>([])
+  const [loadedRouteId, setLoadedRouteId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const quoteId = Number(id)
+  const routeError = !id
+    ? '缺少名言ID'
+    : Number.isNaN(quoteId) || quoteId <= 0
+      ? '无效的名言ID'
+      : null
+  const isPageLoading = routeError === null && loadedRouteId !== id
 
   useEffect(() => {
-    async function fetchDetail(quoteId: number) {
-      setError(null)
-      showLoading()
+    if (routeError || !id) return
+
+    let isActive = true
+    const requestedRouteId = id
+
+    async function fetchDetail() {
       try {
         const res = await getQuoteDetail(quoteId)
-        if (res.code === 0 && res.data) {
+        if (isActive && res.code === 0 && res.data) {
           setQuote(res.data)
-        } else {
+          setError(null)
+        } else if (isActive) {
           const errorMsg = '名言不存在'
           setError(errorMsg)
           toast.error(errorMsg)
         }
       } catch (error) {
-        console.error('获取名言详情失败:', error)
-        const errorMsg = '获取名言详情失败，请稍后重试'
-        setError(errorMsg)
-        toast.error(errorMsg)
+        if (isActive) {
+          console.error('获取名言详情失败:', error)
+          const errorMsg = '获取名言详情失败，请稍后重试'
+          setError(errorMsg)
+          toast.error(errorMsg)
+        }
       } finally {
-        hideLoading()
+        if (isActive) {
+          setLoadedRouteId(requestedRouteId)
+        }
       }
     }
 
-    if (id) {
-      const quoteId = Number(id)
-      if (!isNaN(quoteId) && quoteId > 0) {
-        fetchDetail(quoteId)
-      }
-    }
+    void fetchDetail()
 
     getCategories().then((res) => {
-      if (res.code === 0 && res.data) {
+      if (isActive && res.code === 0 && res.data) {
         setCategories(res.data)
       }
     }).catch(() => {})
-  }, [id, showLoading, hideLoading])
 
-  if (error) {
+    return () => {
+      isActive = false
+    }
+  }, [id, quoteId, routeError])
+
+  if (isPageLoading) {
+    return <PageSkeleton variant="detail" />
+  }
+
+  if (routeError || error) {
     return (
       <section className={styles.errorPage}>
         <div>
-          <h1 className={styles.errorPageTitle}>{error}</h1>
+          <h1 className={styles.errorPageTitle}>{routeError ?? error}</h1>
           <button
             type="button"
             onClick={() => navigate('/quotes')}

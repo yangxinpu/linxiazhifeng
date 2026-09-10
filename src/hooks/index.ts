@@ -1,4 +1,4 @@
-export * from './useAppLoading'
+export * from './useAppSkeleton'
 export * from './useHeaderSearch'
 export * from './useInfiniteScroll'
 export * from './useRequest'

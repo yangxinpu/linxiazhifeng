@@ -25,7 +25,7 @@ import {
   type UploadProps,
 } from 'antd'
 import type { EditableProfileFields, UserProfile } from '@/api'
-import { notifyProfileAvatarUpdated } from '@/constants/profile'
+import { notifyProfileAvatarUpdated } from '@/constants/profile-config'
 import { formatDate } from '@/utils'
 import styles from '../index.module.scss'
 

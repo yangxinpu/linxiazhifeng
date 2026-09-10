@@ -3,15 +3,15 @@ import { useNavigate } from 'react-router-dom'
 import { BookOutlined as BookOpen, HeartOutlined as Heart, LoadingOutlined as Loader2 } from '@ant-design/icons'
 import { getArticleList } from '@/api'
 import type { Article } from '@/api'
-import { useAppLoading } from '@/hooks'
+import PageSkeleton from '@/components/page-skeleton'
 import { toast } from 'sonner'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
 import styles from './index.module.scss'
 
 export default function Article() {
   const navigate = useNavigate()
-  const { showLoading, hideLoading } = useAppLoading()
   const [articles, setArticles] = useState<Article[]>([])
+  const [isPageLoading, setIsPageLoading] = useState(true)
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const pageSize = 10
@@ -41,31 +41,44 @@ export default function Article() {
   })
 
   useEffect(() => {
+    let isActive = true
+
     async function fetchArticles() {
-      showLoading()
       try {
         const res = await getArticleList({ 
           page: 1, 
           pageSize
         })
-        if (res.code === 0 && res.data) {
+        if (isActive && res.code === 0 && res.data) {
           setArticles(res.data.list)
           setTotal(res.data.total)
           setPage(1)
         }
       } catch (error) {
-        console.error('获取文章列表失败:', error)
-        toast.error('获取文章列表失败，请稍后重试')
+        if (isActive) {
+          console.error('获取文章列表失败:', error)
+          toast.error('获取文章列表失败，请稍后重试')
+        }
       } finally {
-        hideLoading()
+        if (isActive) {
+          setIsPageLoading(false)
+        }
       }
     }
-    fetchArticles()
-  }, [showLoading, hideLoading])
+
+    void fetchArticles()
+    return () => {
+      isActive = false
+    }
+  }, [])
 
   const handleArticleClick = useCallback((articleId: number) => {
     navigate(`/article/${articleId}`)
   }, [navigate])
+
+  if (isPageLoading) {
+    return <PageSkeleton />
+  }
 
   return (
     <section className={styles.section}>

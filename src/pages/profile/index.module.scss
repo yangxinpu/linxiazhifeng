@@ -588,6 +588,33 @@
   }
 }
 
+.preferenceThemeSwitch {
+  &:global(.ant-switch) {
+    flex: 0 0 auto;
+    background: var(--muted-foreground);
+
+    &:hover:not(:global(.ant-switch-disabled)) {
+      background: color-mix(in srgb, var(--muted-foreground) 78%, var(--foreground));
+    }
+
+    &:global(.ant-switch-checked) {
+      background: var(--primary);
+
+      &:hover:not(:global(.ant-switch-disabled)) {
+        background: var(--brand-a-hover);
+      }
+    }
+  }
+}
+
+.preferenceThemeIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  line-height: 1;
+}
+
 .preferenceTitle,
 .preferenceDescription {
   &:global(.ant-typography) {

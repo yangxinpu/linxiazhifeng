@@ -6,16 +6,13 @@ import {
   HomeOutlined as Home,
   MenuOutlined as MenuIcon,
   MessageOutlined as Quote,
-  MoonOutlined as Moon,
-  SunOutlined as Sun,
 } from '@ant-design/icons'
-import { Avatar, Button, Layout, Menu, Switch, Tooltip, type MenuProps } from 'antd'
-import { useTheme } from '@/hooks'
+import { Avatar, Button, Layout, Menu, Tooltip, type MenuProps } from 'antd'
 import logo from '@/assets/images/logo.png'
 import {
   DEFAULT_PROFILE_AVATAR_URL,
   PROFILE_AVATAR_UPDATED_EVENT,
-} from '@/constants/profile'
+} from '@/constants/profile-config'
 import HeaderSearch from './components/header-search'
 import styles from './index.module.scss'
 
@@ -39,7 +36,6 @@ const MENU_ITEMS: MenuProps['items'] = NAV_ITEMS.map((item) => {
 
 /** 应用主导航栏。 */
 export default function HeaderSection() {
-  const { resolved, setTheme } = useTheme()
   const location = useLocation()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [profileAvatarUrl, setProfileAvatarUrl] = useState(DEFAULT_PROFILE_AVATAR_URL)
@@ -76,29 +72,18 @@ export default function HeaderSection() {
             <img src={logo} alt="GroveGrace Logo" className={styles.logoImg} />
             <span className={styles.logoText}>GroveGrace</span>
           </Link>
+        </div>
+
+        <div className={styles.headerRightGroup}>
+          <HeaderSearch />
           <Menu
             mode="horizontal"
             items={MENU_ITEMS}
             selectedKeys={activeMenuKey ? [activeMenuKey] : []}
             className={styles.nav}
           />
-        </div>
-
-        <div className={styles.headerRightGroup}>
-          <HeaderSearch />
 
           <div className={styles.headerRight}>
-            <Tooltip title={resolved === 'dark' ? '切换为浅色模式' : '切换为深色模式'}>
-              <Switch
-                checked={resolved === 'dark'}
-                checkedChildren={<Moon className={styles.themeSwitchIcon} />}
-                unCheckedChildren={<Sun className={styles.themeSwitchIcon} />}
-                onChange={(isDarkTheme) => setTheme(isDarkTheme ? 'dark' : 'light')}
-                className={styles.themeSwitch}
-                aria-label="切换深色或浅色主题"
-              />
-            </Tooltip>
-
             <Button
               type="text"
               icon={isMobileMenuOpen ? <Close /> : <MenuIcon />}

@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { appStatusSlice } from './slices/app-status-slice'
+import { appUiSlice } from './slices/app-ui-slice'
 
 /** 应用级 Redux store。 */
 export const store = configureStore({
   reducer: {
-    appStatus: appStatusSlice.reducer,
+    appUi: appUiSlice.reducer,
   },
 })
 

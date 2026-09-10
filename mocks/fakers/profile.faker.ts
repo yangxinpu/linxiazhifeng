@@ -1,5 +1,5 @@
 import type { UserProfile } from '@/api/profile'
-import { DEFAULT_PROFILE_AVATAR_URL } from '@/constants/profile'
+import { DEFAULT_PROFILE_AVATAR_URL } from '@/constants/profile-config'
 
 /** 生成稳定的年度阅读记录，未来日期保持为空白。 */
 function createReadingCalendar(year: number): UserProfile['readingCalendars'][number] {
