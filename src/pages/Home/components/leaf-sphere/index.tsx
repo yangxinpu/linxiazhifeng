@@ -2,16 +2,16 @@ import { useEffect, useRef } from 'react'
 import styles from './index.module.scss'
 
 interface LeafPoint {
-  theta: number
-  phi: number
-  size: number
-  rotation: number
-  colorIndex: number
+  theta: number // 纬度
+  phi: number // 经度
+  size: number // 大小
+  rotation: number // 旋转角度
+  colorIndex: number // 颜色索引
 }
 
-const LEAF_COUNT = 220
-const MAX_DEVICE_PIXEL_RATIO = 2
-const AUTO_ROTATION_SPEED = 0.003
+const LEAF_COUNT = 300 // 叶片数量
+const MAX_DEVICE_PIXEL_RATIO = 2 // 最大设备像素比
+const AUTO_ROTATION_SPEED = 0.003 // 自动旋转速度
 
 function createLeaves(): LeafPoint[] {
   const goldenAngle = Math.PI * (3 - Math.sqrt(5))
@@ -22,7 +22,7 @@ function createLeaves(): LeafPoint[] {
     return {
       theta: goldenAngle * index,
       phi: Math.acos(y),
-      size: 3 + Math.random() * 3,
+      size: 5 + Math.random() * 5,
       rotation: Math.random() * Math.PI * 2,
       colorIndex: index % 2,
     }
