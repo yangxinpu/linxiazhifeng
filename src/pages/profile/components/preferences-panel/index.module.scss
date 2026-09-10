@@ -1,0 +1,235 @@
+.panelCard {
+  &:global(.ant-card) {
+    border-color: var(--border);
+    border-radius: var(--radius-lg);
+    color: var(--card-foreground);
+    background: var(--card);
+    box-shadow: var(--shadow-1);
+  }
+
+  :global(.ant-card-head) {
+    min-height: 52px;
+    padding-inline: 20px;
+    border-bottom-color: var(--border);
+  }
+
+  :global(.ant-card-head-title) {
+    color: var(--foreground);
+    font-size: 16px;
+    font-weight: 650;
+  }
+
+  :global(.ant-card-body) {
+    padding: 20px;
+  }
+}
+
+.mutedText {
+  &:global(.ant-typography) {
+    color: var(--muted-foreground);
+    font-size: 12px;
+  }
+}
+
+.preferenceList {
+  display: grid;
+}
+
+.preferenceRow {
+  display: flex;
+  min-height: 72px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+
+  &:first-child {
+    padding-top: 0;
+  }
+
+  :global(.ant-input-number),
+  :global(.ant-segmented) {
+    border-color: var(--border);
+    color: var(--foreground);
+    background: var(--muted);
+  }
+
+  :global(.ant-input-number-input) {
+    color: var(--foreground);
+  }
+
+  :global(.ant-segmented-item) {
+    color: var(--muted-foreground);
+  }
+
+  :global(.ant-segmented-item-selected) {
+    color: var(--foreground);
+    background: var(--card);
+    box-shadow: var(--shadow-1);
+  }
+
+  :global(.ant-switch-checked) {
+    background: var(--primary);
+  }
+}
+
+.preferenceThemeSwitch {
+  &:global(.ant-switch) {
+    flex: 0 0 auto;
+    background: var(--muted-foreground);
+
+    &:hover:not(:global(.ant-switch-disabled)) {
+      background: color-mix(in srgb, var(--muted-foreground) 78%, var(--foreground));
+    }
+
+    &:global(.ant-switch-checked) {
+      background: var(--primary);
+
+      &:hover:not(:global(.ant-switch-disabled)) {
+        background: var(--brand-a-hover);
+      }
+    }
+  }
+}
+
+.preferenceThemeIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.preferenceTitle,
+.preferenceDescription {
+  &:global(.ant-typography) {
+    display: block;
+  }
+}
+
+.preferenceTitle {
+  &:global(.ant-typography) {
+    color: var(--foreground);
+    font-weight: 600;
+  }
+}
+
+.preferenceDescription {
+  &:global(.ant-typography) {
+    margin-top: 3px;
+    color: var(--muted-foreground);
+    font-size: 12px;
+  }
+}
+
+.preferredCategories {
+  display: grid;
+  gap: 10px;
+  padding-top: 18px;
+}
+
+.preferenceCard {
+  :global(.ant-card-extra .ant-btn-primary) {
+    border-color: var(--primary);
+    color: var(--primary-foreground);
+    background: var(--primary);
+  }
+}
+
+.categorySelect {
+  &:global(.ant-select) {
+    width: 100%;
+  }
+
+  :global(.ant-select-selector) {
+    display: flex;
+    min-height: 40px;
+    align-items: center;
+    padding-block: 4px !important;
+    border-color: var(--border) !important;
+    color: var(--foreground);
+    background: var(--background) !important;
+    box-shadow: none !important;
+  }
+
+  &:global(.ant-select-focused) {
+    :global(.ant-select-selector) {
+      border-color: var(--primary) !important;
+      box-shadow: var(--focus-ring) !important;
+    }
+  }
+
+  :global(.ant-select-selection-wrap),
+  :global(.ant-select-selection-overflow) {
+    min-height: 30px;
+    align-items: center;
+  }
+
+  :global(.ant-select-selection-search) {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  :global(.ant-select-selection-search-input) {
+    height: 24px !important;
+  }
+
+  :global(.ant-select-selection-item) {
+    display: inline-flex;
+    height: 24px;
+    align-items: center;
+    border-color: var(--accent-border);
+    color: var(--primary);
+    background: var(--accent);
+    line-height: 22px;
+  }
+
+  :global(.ant-select-selection-item-remove) {
+    color: var(--muted-foreground);
+  }
+
+  :global(.ant-select-selection-placeholder) {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    color: var(--muted-foreground);
+  }
+}
+
+@media (max-width: 639px) {
+  .panelCard {
+    :global(.ant-card-head),
+    :global(.ant-card-body) {
+      padding-inline: 16px;
+    }
+  }
+
+  .preferenceCard {
+    :global(.ant-card-head-wrapper) {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 10px;
+      padding-block: 12px;
+    }
+
+    :global(.ant-card-extra) {
+      margin-inline-start: 0;
+    }
+  }
+
+  .preferenceRow {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+
+    :global(.ant-segmented) {
+      width: 100%;
+    }
+
+    :global(.ant-segmented-group) {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+}

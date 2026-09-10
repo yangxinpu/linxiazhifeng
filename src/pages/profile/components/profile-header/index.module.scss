@@ -1,0 +1,319 @@
+.panelCard {
+  &:global(.ant-card) {
+    border-color: var(--border);
+    border-radius: var(--radius-lg);
+    color: var(--card-foreground);
+    background: var(--card);
+    box-shadow: var(--shadow-1);
+  }
+
+  :global(.ant-card-head) {
+    min-height: 52px;
+    padding-inline: 20px;
+    border-bottom-color: var(--border);
+  }
+
+  :global(.ant-card-head-title) {
+    color: var(--foreground);
+    font-size: 16px;
+    font-weight: 650;
+  }
+
+  :global(.ant-card-body) {
+    padding: 20px;
+  }
+}
+
+.profileHeader {
+  &:global(.ant-card) {
+    overflow: hidden;
+  }
+
+  :global(.ant-card-body) {
+    padding: 28px;
+  }
+}
+
+.profileHeaderMain {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.identity {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.avatar {
+  &:global(.ant-avatar) {
+    color: var(--primary-foreground);
+    background: var(--primary);
+    font-family: var(--font-quote);
+    font-size: 34px;
+    font-weight: 700;
+    box-shadow: 0 0 0 6px var(--accent);
+
+    img {
+      object-fit: cover;
+    }
+  }
+}
+
+.identityContent {
+  min-width: 0;
+}
+
+.profileName {
+  &:global(.ant-typography) {
+    margin: 0;
+    color: var(--foreground);
+    font-family: var(--font-quote);
+    font-size: 30px;
+    line-height: 1.25;
+  }
+}
+
+.username {
+  &:global(.ant-typography) {
+    display: block;
+    margin-top: 2px;
+    color: var(--muted-foreground);
+    font-size: 13px;
+  }
+}
+
+.bio {
+  &:global(.ant-typography) {
+    max-width: 580px;
+    margin: 12px 0 10px;
+    color: color-mix(in srgb, var(--foreground) 78%, transparent);
+    line-height: 1.7;
+  }
+}
+
+.identityMeta {
+  :global(.ant-typography) {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--muted-foreground);
+    font-size: 12px;
+  }
+
+  a {
+    color: var(--brand-b);
+
+    &:hover {
+      color: var(--brand-b-hover);
+    }
+  }
+}
+
+.editProfileButton {
+  &:global(.ant-btn) {
+    flex: 0 0 auto;
+    border-color: var(--border);
+    color: var(--foreground);
+    background: var(--card);
+    box-shadow: none;
+
+    &:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--accent);
+    }
+  }
+}
+
+.profileModal {
+  :global(.ant-modal-content),
+  :global(.ant-modal-header) {
+    color: var(--foreground);
+    background: var(--card);
+  }
+
+  :global(.ant-modal-title) {
+    color: var(--foreground);
+  }
+
+  :global(.ant-modal-close) {
+    color: var(--muted-foreground);
+
+    &:hover {
+      color: var(--foreground);
+      background: var(--hover);
+    }
+  }
+
+  :global(.ant-btn-default) {
+    border-color: var(--border);
+    color: var(--foreground);
+    background: var(--card);
+  }
+
+  :global(.ant-btn-primary) {
+    border-color: var(--primary);
+    color: var(--primary-foreground);
+    background: var(--primary);
+  }
+}
+
+.profileForm {
+  margin-top: 22px;
+
+  :global(.ant-form-item-label > label) {
+    color: var(--foreground);
+  }
+
+  :global(.ant-input),
+  :global(.ant-input-affix-wrapper) {
+    border-color: var(--border);
+    color: var(--foreground);
+    background: var(--background);
+
+    &:hover,
+    &:focus {
+      border-color: var(--primary);
+    }
+  }
+
+  :global(.ant-input-data-count) {
+    color: var(--muted-foreground);
+  }
+}
+
+.avatarUpload {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  :global(.ant-avatar) {
+    flex: 0 0 auto;
+    color: var(--primary-foreground);
+    background: var(--primary);
+    box-shadow: 0 0 0 4px var(--accent);
+  }
+
+  :global(.ant-btn) {
+    border-color: var(--border);
+    color: var(--foreground);
+    background: var(--card);
+
+    &:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+  }
+}
+
+.avatarUploadHint {
+  &:global(.ant-typography) {
+    display: block;
+    margin-top: 7px;
+    color: var(--muted-foreground);
+    font-size: 12px;
+  }
+}
+
+.profileDivider {
+  &:global(.ant-divider) {
+    margin: 24px 0;
+    border-color: var(--border);
+  }
+}
+
+.statistics {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+
+  :global(.ant-statistic) {
+    padding-inline: 8px;
+  }
+
+  :global(.ant-statistic-title) {
+    margin-bottom: 4px;
+    color: var(--muted-foreground);
+    font-size: 12px;
+  }
+
+  :global(.ant-statistic-content) {
+    color: var(--foreground);
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  :global(.ant-statistic-content-prefix) {
+    margin-inline-end: 7px;
+    color: var(--primary);
+    font-size: 17px;
+  }
+
+  :global(.ant-statistic-content-suffix) {
+    color: var(--muted-foreground);
+    font-size: 12px;
+    font-weight: 500;
+  }
+}
+
+@media (max-width: 899px) {
+  .statistics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 639px) {
+  .profileHeader {
+    :global(.ant-card-body) {
+      padding: 20px 16px;
+    }
+  }
+
+  .profileHeaderMain,
+  .identity {
+    flex-direction: column;
+  }
+
+  .profileHeaderMain {
+    align-items: stretch;
+  }
+
+  .identity {
+    align-items: center;
+    text-align: center;
+  }
+
+  .identityContent {
+    width: 100%;
+  }
+
+  .profileName {
+    &:global(.ant-typography) {
+      font-size: 26px;
+    }
+  }
+
+  .identityMeta {
+    &:global(.ant-space) {
+      justify-content: center;
+    }
+  }
+
+  .statistics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    :global(.ant-statistic-content) {
+      font-size: 19px;
+    }
+  }
+
+  .editProfileButton {
+    &:global(.ant-btn) {
+      align-self: center;
+    }
+  }
+}

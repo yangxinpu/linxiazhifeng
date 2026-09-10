@@ -16,7 +16,7 @@ import {
 } from 'antd'
 import type { ProfilePreferences, UserProfile } from '@/api'
 import { useTheme } from '@/hooks'
-import styles from '../index.module.scss'
+import styles from './index.module.scss'
 
 const { Text } = Typography
 

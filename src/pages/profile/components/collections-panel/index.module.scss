@@ -1,0 +1,155 @@
+.panelCard {
+  &:global(.ant-card) {
+    height: 100%;
+    border-color: var(--border);
+    border-radius: var(--radius-lg);
+    color: var(--card-foreground);
+    background: var(--card);
+    box-shadow: var(--shadow-1);
+  }
+
+  :global(.ant-card-head) {
+    min-height: 52px;
+    padding-inline: 20px;
+    border-bottom-color: var(--border);
+  }
+
+  :global(.ant-card-head-title) {
+    color: var(--foreground);
+    font-size: 16px;
+    font-weight: 650;
+  }
+
+  :global(.ant-card-body) {
+    padding: 20px;
+  }
+}
+
+.collectionGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.mutedText {
+  &:global(.ant-typography) {
+    color: var(--muted-foreground);
+    font-size: 12px;
+  }
+}
+
+.quoteListItem,
+.articleListItem {
+  &:global(.ant-list-item) {
+    border-block-end-color: var(--border);
+  }
+}
+
+.quoteListItem {
+  &:global(.ant-list-item) {
+    align-items: flex-start;
+    padding-block: 18px;
+  }
+
+  :global(.ant-list-item-action) {
+    margin-inline-start: 12px;
+
+    a {
+      display: inline-flex;
+      width: 32px;
+      height: 32px;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-md);
+      color: var(--muted-foreground);
+
+      &:hover {
+        color: var(--primary);
+        background: var(--accent);
+      }
+    }
+  }
+}
+
+.favoriteQuote {
+  &:global(.ant-typography) {
+    margin-bottom: 8px;
+    color: var(--foreground);
+    font-family: var(--font-quote);
+    font-size: 16px;
+    line-height: 1.75;
+  }
+}
+
+.quoteAuthor {
+  &:global(.ant-typography) {
+    color: var(--foreground);
+    font-size: 12px;
+    font-weight: 650;
+  }
+}
+
+.articleListItem {
+  &:global(.ant-list-item) {
+    padding-block: 18px;
+  }
+}
+
+.recentArticle {
+  width: 100%;
+}
+
+.recentArticleHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 9px;
+}
+
+.recentArticleTitle {
+  &:global(.ant-typography) {
+    margin: 0 0 6px;
+    color: var(--foreground);
+    font-size: 15px;
+    line-height: 1.5;
+    transition: color 160ms ease;
+  }
+
+  &:hover {
+    color: var(--primary);
+  }
+}
+
+.categoryTag {
+  &:global(.ant-tag) {
+    margin: 0;
+    border-color: var(--border);
+    color: var(--muted-foreground);
+    background: var(--muted);
+  }
+}
+
+.readPercent {
+  &:global(.ant-typography) {
+    flex: 0 0 auto;
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 650;
+  }
+}
+
+@media (max-width: 899px) {
+  .collectionGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 639px) {
+  .panelCard {
+    :global(.ant-card-head),
+    :global(.ant-card-body) {
+      padding-inline: 16px;
+    }
+  }
+}

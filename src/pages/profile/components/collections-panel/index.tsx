@@ -3,7 +3,7 @@ import { BookOutlined, HeartOutlined, RightOutlined } from '@ant-design/icons'
 import { Card, List, Progress, Space, Tag, Typography } from 'antd'
 import type { UserProfile } from '@/api'
 import { formatDate } from '@/utils'
-import styles from '../index.module.scss'
+import styles from './index.module.scss'
 
 const { Paragraph, Text, Title } = Typography
 

@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { Card, Select, Tooltip, Typography } from 'antd'
 import type { DailyReadingRecord, UserProfile } from '@/api'
 import { formatDate } from '@/utils'
-import styles from '../index.module.scss'
+import styles from './index.module.scss'
 
 const { Text } = Typography
 const MONTH_LABELS = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']

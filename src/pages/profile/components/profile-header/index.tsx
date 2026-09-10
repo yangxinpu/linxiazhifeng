@@ -27,7 +27,7 @@ import {
 import type { EditableProfileFields, UserProfile } from '@/api'
 import { notifyProfileAvatarUpdated } from '@/constants/profile-config'
 import { formatDate } from '@/utils'
-import styles from '../index.module.scss'
+import styles from './index.module.scss'
 
 const { Link: ExternalLink, Paragraph, Text, Title } = Typography
 const MAX_AVATAR_SIZE = 2 * 1024 * 1024

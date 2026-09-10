@@ -1,0 +1,150 @@
+.panelCard {
+  &:global(.ant-card) {
+    border-color: var(--border);
+    border-radius: var(--radius-lg);
+    color: var(--card-foreground);
+    background: var(--card);
+    box-shadow: var(--shadow-1);
+  }
+
+  :global(.ant-card-head) {
+    min-height: 52px;
+    padding-inline: 20px;
+    border-bottom-color: var(--border);
+  }
+
+  :global(.ant-card-head-title) {
+    color: var(--foreground);
+    font-size: 16px;
+    font-weight: 650;
+  }
+
+  :global(.ant-card-body) {
+    padding: 20px;
+  }
+}
+
+.contributionCard {
+  :global(.ant-card-body) {
+    padding-top: 26px;
+  }
+}
+
+.yearSelect {
+  &:global(.ant-select) {
+    min-width: 108px;
+  }
+
+  :global(.ant-select-selector) {
+    border-color: var(--border) !important;
+    color: var(--foreground);
+    background: var(--background) !important;
+    box-shadow: none !important;
+  }
+
+  :global(.ant-select-arrow) {
+    color: var(--muted-foreground);
+  }
+}
+
+.contributionScroller {
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.contributionContent {
+  width: max-content;
+  min-width: 1102px;
+}
+
+.monthLabels {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  margin: 0 0 10px 46px;
+  color: var(--muted-foreground);
+  font-size: 12px;
+}
+
+.contributionBody {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.weekLabels {
+  display: grid;
+  width: 36px;
+  flex: 0 0 36px;
+  grid-template-rows: repeat(7, 16px);
+  row-gap: 4px;
+  color: var(--muted-foreground);
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.contributionGrid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 16px;
+  grid-template-rows: repeat(7, 16px);
+  gap: 4px;
+}
+
+.contributionCell,
+.contributionPlaceholder {
+  display: block;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+}
+
+.contributionCell {
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+}
+
+.contributionPlaceholder {
+  visibility: hidden;
+}
+
+.contributionLevel0 {
+  background: var(--muted);
+}
+
+.contributionLevel1 {
+  background: color-mix(in srgb, var(--primary) 24%, var(--card));
+}
+
+.contributionLevel2 {
+  background: color-mix(in srgb, var(--primary) 46%, var(--card));
+}
+
+.contributionLevel3 {
+  background: color-mix(in srgb, var(--primary) 72%, var(--card));
+}
+
+.contributionLevel4 {
+  background: var(--primary);
+}
+
+.contributionLegend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 16px;
+
+  :global(.ant-typography) {
+    margin-inline: 4px;
+    color: var(--muted-foreground);
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 639px) {
+  .panelCard {
+    :global(.ant-card-head),
+    :global(.ant-card-body) {
+      padding-inline: 16px;
+    }
+  }
+}
