@@ -7,13 +7,14 @@
 - 首页展示最新名言、站点入口和可拖动的 Canvas 树叶球动画
 - 名言分类筛选、分页加载、无限滚动和详情阅读
 - 文章分页加载、无限滚动和详情阅读
+- 个人中心展示阅读档案、年度阅读绿墙、收藏足迹与阅读偏好
+- Header 综合搜索支持搜索历史、模糊匹配和内容推荐
 - 深色与浅色主题切换及本地持久化
 - 响应式 Header、移动端导航、全局加载页和 404 页面
-- 开发环境自动启用 MSW，提供名言、文章和口语学习 Mock 接口
+- 开发环境自动启用 MSW，提供名言、文章、个人中心、综合搜索和口语学习 Mock 接口
 
 当前功能边界：
 
-- Header 搜索框目前只有交互界面，尚未接入搜索行为
 - 口语学习模块目前只有 Mock 数据和接口，没有对应页面与路由
 - `VirtualList` 组件目前未被页面使用
 - 项目暂未配置自动化测试框架
@@ -75,6 +76,7 @@ pnpm preview
 | `/quote/:id` | 名言详情 |
 | `/articles` | 文章列表 |
 | `/article/:id` | 文章详情 |
+| `/profile` | 个人中心 |
 | `*` | 404 页面 |
 
 页面通过 `React.lazy` 按路由拆分，并统一挂载在主布局的 `Outlet` 中。
@@ -95,7 +97,7 @@ pnpm preview
 │   ├── api/                      # Axios 客户端、接口函数和类型
 │   ├── assets/                   # 静态资源
 │   ├── components/               # 通用组件
-│   ├── hooks/                    # 请求、主题、加载和无限滚动 Hooks
+│   ├── hooks/                    # 请求、搜索、主题、加载和无限滚动 Hooks
 │   ├── layout/                   # 主布局、加载页和 404 页面
 │   ├── pages/                    # 首页、名言、文章及详情页
 │   ├── stores/                   # Redux store 与状态切片
@@ -132,6 +134,12 @@ GET /api/articles
 GET /api/articles/latest
 GET /api/articles/categories
 GET /api/articles/:id
+
+GET /api/profile
+PATCH /api/profile
+PATCH /api/profile/preferences
+
+GET /api/search
 
 GET /api/speaking/books
 GET /api/speaking/books/:id

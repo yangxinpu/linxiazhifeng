@@ -1,9 +1,8 @@
 import { http, HttpResponse, delay } from 'msw'
-import { createMockQuoteList, createMockQuoteDetail, CATEGORY_OPTIONS } from '@mocks/fakers'
+import { createMockQuoteDetail, CATEGORY_OPTIONS } from '@mocks/fakers'
+import { mockQuotes } from '@mocks/data/content.data'
 
 const BASE_URL = '/api'
-
-const quoteList = createMockQuoteList(50)
 
 export const quoteHandlers = [
   http.get(`${BASE_URL}/quotes/categories`, async () => {
@@ -22,7 +21,7 @@ export const quoteHandlers = [
     const url = new URL(request.url)
     const limit = Number(url.searchParams.get('limit')) || 5
 
-    const latestQuotes = quoteList
+    const latestQuotes = [...mockQuotes]
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       .slice(0, limit)
 
@@ -41,12 +40,12 @@ export const quoteHandlers = [
     const pageSize = Number(url.searchParams.get('pageSize')) || 10
     const category = url.searchParams.get('category')
 
-    let filtered = quoteList
+    let filtered = mockQuotes
     if (category) {
       filtered = filtered.filter((q) => q.category === category)
     }
 
-    const sorted = filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    const sorted = [...filtered].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     const start = (page - 1) * pageSize
     const end = start + pageSize
     const paginatedList = sorted.slice(start, end)
@@ -67,7 +66,7 @@ export const quoteHandlers = [
     await delay(200)
 
     const id = Number(params.id)
-    const quote = quoteList.find((q) => q.id === id)
+    const quote = mockQuotes.find((q) => q.id === id)
 
     if (!quote) {
       return HttpResponse.json(
@@ -87,7 +86,7 @@ export const quoteHandlers = [
     await delay(300)
 
     const id = Number(params.id)
-    const quote = quoteList.find((q) => q.id === id)
+    const quote = mockQuotes.find((q) => q.id === id)
 
     if (!quote) {
       return HttpResponse.json(

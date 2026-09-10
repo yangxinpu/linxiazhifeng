@@ -126,7 +126,7 @@ pnpm build
 
 ## 当前功能边界
 
-- Header 搜索框尚未接入查询行为，不要在没有需求时假设它已经可搜索。
+- Header 综合搜索使用 `/api/search`，开发数据来自共享内容 Mock，历史记录保存在浏览器本地。
 - `mocks/handlers/speaking.handler.ts` 只有 Mock 接口，没有对应页面和正式 API 模块。
 - `src/components/VirtualList/` 当前未被页面使用。
 - 不要在文档或 UI 中把预留模块描述为已完成功能。

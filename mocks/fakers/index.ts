@@ -7,3 +7,4 @@ export {
   type MockQuoteDetail,
   type MockCategory,
 } from './quote.faker'
+export { createMockUserProfile } from './profile.faker'

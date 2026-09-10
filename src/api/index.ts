@@ -1,3 +1,5 @@
 export * from './quote'
 export * from './article'
+export * from './profile'
+export * from './search'
 export type * from './global-type'

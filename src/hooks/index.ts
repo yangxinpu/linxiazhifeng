@@ -1,4 +1,5 @@
 export * from './useAppLoading'
+export * from './useHeaderSearch'
 export * from './useInfiniteScroll'
 export * from './useRequest'
 export * from './useTheme'

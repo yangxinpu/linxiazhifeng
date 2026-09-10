@@ -1,9 +1,8 @@
 import { http, HttpResponse, delay } from 'msw'
-import { createMockArticleList, ARTICLE_CATEGORIES } from '@mocks/fakers/article.faker'
+import { ARTICLE_CATEGORIES } from '@mocks/fakers/article.faker'
+import { mockArticles } from '@mocks/data/content.data'
 
 const BASE_URL = '/api'
-
-const articleList = createMockArticleList(12)
 
 export const articleHandlers = [
   http.get(`${BASE_URL}/articles/categories`, async () => {
@@ -22,7 +21,7 @@ export const articleHandlers = [
     const url = new URL(request.url)
     const limit = Number(url.searchParams.get('limit')) || 5
 
-    const latestArticles = articleList
+    const latestArticles = [...mockArticles]
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       .slice(0, limit)
 
@@ -42,7 +41,7 @@ export const articleHandlers = [
     const category = url.searchParams.get('category')
     const keyword = url.searchParams.get('keyword')
 
-    let filtered = articleList
+    let filtered = mockArticles
 
     if (category) {
       filtered = filtered.filter((a) => a.category === category)
@@ -58,7 +57,7 @@ export const articleHandlers = [
       )
     }
 
-    const sorted = filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    const sorted = [...filtered].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     const start = (page - 1) * pageSize
     const end = start + pageSize
     const paginatedList = sorted.slice(start, end)
@@ -79,7 +78,7 @@ export const articleHandlers = [
     await delay(200)
 
     const id = Number(params.id)
-    const article = articleList.find((a) => a.id === id)
+    const article = mockArticles.find((a) => a.id === id)
 
     if (!article) {
       return HttpResponse.json(

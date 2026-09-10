@@ -42,6 +42,10 @@
   --header-height: 64px;
   --content-width: 896px;
   --wide-content-width: 1024px;
+  /* 个人中心年度阅读视图宽度 */
+  --profile-content-width: 1120px;
+  /* Header 居中搜索面板的最大宽度 */
+  --header-search-width: 620px;
   --layout-gutter: clamp(16px, 3vw, 48px);
 
   /* 圆角 */

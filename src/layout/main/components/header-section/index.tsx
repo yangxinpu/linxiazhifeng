@@ -7,12 +7,16 @@ import {
   MenuOutlined as MenuIcon,
   MessageOutlined as Quote,
   MoonOutlined as Moon,
-  SearchOutlined as Search,
   SunOutlined as Sun,
 } from '@ant-design/icons'
-import { Button, Input, Layout, Menu, type MenuProps } from 'antd'
+import { Avatar, Button, Layout, Menu, Switch, Tooltip, type MenuProps } from 'antd'
 import { useTheme } from '@/hooks'
 import logo from '@/assets/images/logo.png'
+import {
+  DEFAULT_PROFILE_AVATAR_URL,
+  PROFILE_AVATAR_UPDATED_EVENT,
+} from '@/constants/profile'
+import HeaderSearch from './components/header-search'
 import styles from './index.module.scss'
 
 const { Header } = Layout
@@ -35,11 +39,12 @@ const MENU_ITEMS: MenuProps['items'] = NAV_ITEMS.map((item) => {
 
 /** 应用主导航栏。 */
 export default function HeaderSection() {
-  const { resolved, toggleTheme } = useTheme()
+  const { resolved, setTheme } = useTheme()
   const location = useLocation()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [isSearchFocused, setIsSearchFocused] = useState(false)
+  const [profileAvatarUrl, setProfileAvatarUrl] = useState(DEFAULT_PROFILE_AVATAR_URL)
   const previousPathnameRef = useRef(location.pathname)
+  const isProfileActive = location.pathname.startsWith('/profile')
 
   const activeMenuKey = NAV_ITEMS.find((item) => item.matchPaths.some((path) => (
     path === '/' ? location.pathname === path : location.pathname.startsWith(path)
@@ -52,41 +57,47 @@ export default function HeaderSection() {
     setIsMobileMenuOpen(false)
   }, [location.pathname])
 
+  useEffect(() => {
+    function handleAvatarUpdated(event: Event) {
+      if (event instanceof CustomEvent && typeof event.detail === 'string') {
+        setProfileAvatarUrl(event.detail)
+      }
+    }
+
+    window.addEventListener(PROFILE_AVATAR_UPDATED_EVENT, handleAvatarUpdated)
+    return () => window.removeEventListener(PROFILE_AVATAR_UPDATED_EVENT, handleAvatarUpdated)
+  }, [])
+
   return (
     <Header className={styles.header}>
       <div className={styles.headerInner}>
-        <Link to="/" className={`${styles.logoLink} ${isSearchFocused ? styles.logoLinkHidden : ''}`}>
-          <img src={logo} alt="GroveGrace Logo" className={styles.logoImg} />
-          <span className={styles.logoText}>GroveGrace</span>
-        </Link>
-
-        <div className={`${styles.headerCenter} ${isSearchFocused ? styles.headerCenterFocused : ''}`}>
+        <div className={styles.brandGroup}>
+          <Link to="/" className={styles.logoLink}>
+            <img src={logo} alt="GroveGrace Logo" className={styles.logoImg} />
+            <span className={styles.logoText}>GroveGrace</span>
+          </Link>
           <Menu
             mode="horizontal"
             items={MENU_ITEMS}
             selectedKeys={activeMenuKey ? [activeMenuKey] : []}
-            className={`${styles.nav} ${isSearchFocused ? styles.navHidden : ''}`}
+            className={styles.nav}
           />
+        </div>
 
-          <Input
-            allowClear
-            prefix={<Search className={styles.searchIcon} />}
-            placeholder="搜索..."
-            aria-label="搜索内容"
-            className={`${styles.searchBox} ${isSearchFocused ? styles.searchBoxFocused : ''}`}
-            onFocus={() => setIsSearchFocused(true)}
-            onBlur={() => setIsSearchFocused(false)}
-          />
+        <div className={styles.headerRightGroup}>
+          <HeaderSearch />
 
-          <div className={`${styles.headerRight} ${isSearchFocused ? styles.headerRightHidden : ''}`}>
-            <Button
-              type="text"
-              icon={resolved === 'dark' ? <Sun /> : <Moon />}
-              onClick={toggleTheme}
-              className={styles.iconButton}
-              aria-label="切换主题"
-              title="切换主题"
-            />
+          <div className={styles.headerRight}>
+            <Tooltip title={resolved === 'dark' ? '切换为浅色模式' : '切换为深色模式'}>
+              <Switch
+                checked={resolved === 'dark'}
+                checkedChildren={<Moon className={styles.themeSwitchIcon} />}
+                unCheckedChildren={<Sun className={styles.themeSwitchIcon} />}
+                onChange={(isDarkTheme) => setTheme(isDarkTheme ? 'dark' : 'light')}
+                className={styles.themeSwitch}
+                aria-label="切换深色或浅色主题"
+              />
+            </Tooltip>
 
             <Button
               type="text"
@@ -96,6 +107,23 @@ export default function HeaderSection() {
               aria-label="菜单"
               aria-expanded={isMobileMenuOpen}
             />
+
+            <Tooltip title="打开个人主页" placement="bottomRight">
+              <Link
+                to="/profile"
+                className={`${styles.profileLink} ${isProfileActive ? styles.profileLinkActive : ''}`}
+                aria-label="打开个人主页"
+              >
+                <Avatar
+                  size={38}
+                  src={profileAvatarUrl}
+                  alt="林知夏的头像"
+                  className={styles.profileAvatar}
+                >
+                  林
+                </Avatar>
+              </Link>
+            </Tooltip>
           </div>
         </div>
       </div>
