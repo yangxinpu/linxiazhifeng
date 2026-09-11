@@ -1,7 +1,6 @@
 import {
   ArrowRightOutlined,
-  BookOutlined,
-  CompassOutlined,
+  BookOutlined, 
   MessageOutlined,
   ReadOutlined,
 } from '@ant-design/icons'
@@ -80,7 +79,7 @@ export default function Home() {
             </h1>
 
             <p className={styles.intro}>
-              在经典文字与当代思考之间，留一处可以慢下来阅读、理解和沉淀的地方。
+              在经典文字与当代思考之间，留一处可以慢下来阅读、理解和沉淀的地方
             </p>
 
             <Link
@@ -88,7 +87,6 @@ export default function Home() {
               className={styles.heroQuote}
               aria-label={`阅读${featuredQuote.author}的名言详情`}
             >
-              <MessageOutlined className={styles.heroQuoteIcon} aria-hidden="true" />
               <blockquote>
                 <p>“{featuredQuote.content}”</p>
                 <footer>
@@ -124,7 +122,7 @@ export default function Home() {
               <BookOutlined className={styles.pathIcon} aria-hidden="true" />
               <div className={styles.pathContent}>
                 <h3>经典文章</h3>
-                <p>从文学、哲学、历史与科学中，建立更完整的理解。</p>
+                <p>从文学、哲学、历史与科学中，建立更完整的理解</p>
               </div>
               <ArrowRightOutlined className={styles.pathArrow} aria-hidden="true" />
             </Link>
@@ -134,7 +132,7 @@ export default function Home() {
               <MessageOutlined className={styles.pathIcon} aria-hidden="true" />
               <div className={styles.pathContent}>
                 <h3>思想短句</h3>
-                <p>用一段凝练的文字，为忙碌的一天留下思考的间隙。</p>
+                <p>用一段凝练的文字，为忙碌的一天留下思考的间隙</p>
               </div>
               <ArrowRightOutlined className={styles.pathArrow} aria-hidden="true" />
             </Link>
@@ -144,7 +142,7 @@ export default function Home() {
               <ReadOutlined className={styles.pathIcon} aria-hidden="true" />
               <div className={styles.pathContent}>
                 <h3>阅读足迹</h3>
-                <p>回看阅读记录与年度绿墙，让持续阅读变得清晰可见。</p>
+                <p>回看阅读记录与年度绿墙，让持续阅读变得清晰可见</p>
               </div>
               <ArrowRightOutlined className={styles.pathArrow} aria-hidden="true" />
             </Link>
@@ -215,7 +213,6 @@ export default function Home() {
             <div>
               <h2 id="quotes-title">带走一句话</h2>
             </div>
-            <CompassOutlined className={styles.sectionSymbol} aria-hidden="true" />
           </header>
 
           <div className={styles.quoteGrid}>
@@ -225,7 +222,6 @@ export default function Home() {
                 to={getQuotePath(quote)}
                 className={styles.quoteItem}
               >
-                <MessageOutlined className={styles.quoteItemIcon} aria-hidden="true" />
                 <blockquote>
                   <p>“{quote.content}”</p>
                   <footer>
@@ -241,10 +237,9 @@ export default function Home() {
 
       <section className={styles.closingSection}>
         <div className={styles.closingInner}>
-          <p>阅读不必追赶速度</p>
-          <h2>每天读一点，让理解自然生长。</h2>
+          <h2>每天读一点，让理解自然生长</h2>
           <Link to="/articles" className={styles.closingAction}>
-            继续探索
+            继续阅读
             <ArrowRightOutlined aria-hidden="true" />
           </Link>
         </div>

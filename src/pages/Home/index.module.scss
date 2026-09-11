@@ -133,7 +133,7 @@
 .heroQuote {
   display: grid;
   max-width: 600px;
-  grid-template-columns: 24px minmax(0, 1fr) 24px;
+  grid-template-columns: minmax(0, 1fr) 24px;
   align-items: center;
   gap: 16px;
   margin-top: 36px;
@@ -178,11 +178,6 @@
   }
 }
 
-.heroQuoteIcon {
-  color: var(--brand-b);
-  font-size: 20px;
-}
-
 .heroQuoteArrow {
   color: var(--muted-foreground);
   font-size: 15px;
@@ -211,9 +206,6 @@
   font-weight: 700;
   transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
 
-  &:hover {
-    transform: translateY(-2px);
-  }
 }
 
 .primaryAction {
@@ -528,12 +520,16 @@
   display: grid;
   min-width: 0;
   min-height: 230px;
-  grid-template-columns: 24px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   align-content: start;
-  gap: 18px;
+  gap: 0;
   padding: 28px 24px;
   border-inline-start: 2px solid var(--border);
   transition: border-color 180ms ease, background-color 180ms ease;
+
+  blockquote {
+    min-width: 0;
+  }
 
   blockquote p {
     color: var(--foreground);
@@ -556,18 +552,7 @@
   &:focus-visible {
     border-color: var(--primary);
     background: var(--card);
-
-    .quoteItemIcon {
-      color: var(--primary);
-    }
   }
-}
-
-.quoteItemIcon {
-  margin-top: 6px;
-  color: var(--brand-b);
-  font-size: 19px;
-  transition: color 180ms ease;
 }
 
 .closingSection {
@@ -578,15 +563,9 @@
 
 .closingInner {
   display: grid;
-  grid-template-columns: 150px minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 36px;
-
-  > p {
-    font-size: 12px;
-    font-weight: 700;
-    opacity: 0.76;
-  }
 
   h2 {
     max-width: 700px;
@@ -641,14 +620,6 @@
   .quoteItem {
     padding-inline: 16px;
   }
-
-  .closingInner {
-    grid-template-columns: minmax(0, 1fr) auto;
-
-    > p {
-      grid-column: 1 / -1;
-    }
-  }
 }
 
 @media (max-width: 639px) {
@@ -679,7 +650,7 @@
 
   .heroQuote {
     max-width: 92%;
-    grid-template-columns: 20px minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
     gap: 12px;
     margin-top: 28px;
 
@@ -797,10 +768,6 @@
   .closingInner {
     grid-template-columns: 1fr;
     gap: 18px;
-
-    > p {
-      grid-column: auto;
-    }
 
     h2 {
       font-size: 27px;
