@@ -1,3 +1,21 @@
+import type { Category } from '../global-type'
+
+/** 名言筛选分类组合 */
+export interface QuoteCategories {
+  /** 主题分类（对应后端 quote.category 字段） */
+  categories: Category[]
+  /** 文体分类 */
+  forms: Category[]
+  /** 地域分类 */
+  regions: Category[]
+}
+
+/** 名言文体分类 */
+export type QuoteForm = 'proverb' | 'aphorism' | 'poetry' | 'literary' | 'folk'
+
+/** 名言地域分类 */
+export type QuoteRegion = 'china' | 'foreign'
+
 /** 名言 */
 export interface Quote {
   id: number
@@ -5,6 +23,8 @@ export interface Quote {
   author: string
   source: string
   category: 'philosophy' | 'literature' | 'science' | 'life' | 'wisdom' | 'love' | 'friendship' | 'success' | 'courage' | 'education' | 'nature' | 'art' | 'history'
+  form?: QuoteForm
+  region?: QuoteRegion
   detailId: number
   background?: string
   viewCount: number
@@ -23,6 +43,8 @@ export interface QuoteDetail {
   author: string
   source: string
   category: 'philosophy' | 'literature' | 'science' | 'life' | 'wisdom' | 'love' | 'friendship' | 'success' | 'courage' | 'education' | 'nature' | 'art' | 'history'
+  form?: QuoteForm
+  region?: QuoteRegion
   authorBio: string
   story: string
   background: string

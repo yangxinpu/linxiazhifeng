@@ -7,6 +7,9 @@ import {
 } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import type { RootState } from '@/stores'
+import { useTheme } from '@/hooks'
 import {
   ArrowRightOutlined as ArrowRight,
   CloseOutlined as Close,
@@ -17,7 +20,10 @@ import {
   HomeOutlined as Home,
   MenuOutlined as MenuIcon,
   MessageOutlined as Quote,
+  MoonOutlined,
   SearchOutlined as Search,
+  SunOutlined,
+  UserOutlined,
 } from '@ant-design/icons'
 import {
   Avatar,
@@ -37,10 +43,6 @@ import {
 import { getSearchResults } from '@/api'
 import type { SearchResult } from '@/api'
 import logo from '@/assets/images/Linxiazhifeng.png'
-import {
-  DEFAULT_PROFILE_AVATAR_URL,
-  PROFILE_AVATAR_UPDATED_EVENT,
-} from '@/constants/profile-config'
 import styles from './index.module.scss'
 
 const { Header } = Layout
@@ -499,14 +501,20 @@ const MENU_ITEMS: MenuProps['items'] = NAV_ITEMS.map((item) => {
 /** 应用主导航栏。 */
 export default function HeaderSection() {
   const location = useLocation()
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [profileAvatarUrl, setProfileAvatarUrl] = useState(DEFAULT_PROFILE_AVATAR_URL)
   const previousPathnameRef = useRef(location.pathname)
-  const isProfileActive = location.pathname.startsWith('/profile')
+  const isProfileActive = isAuthenticated && location.pathname.startsWith('/profile')
+  const { theme, toggleTheme } = useTheme()
+  const isDark = theme === 'dark'
 
   const activeMenuKey = NAV_ITEMS.find((item) => item.matchPaths.some((path) => (
     path === '/' ? location.pathname === path : location.pathname.startsWith(path)
   )))?.path
+
+  const handleToggleTheme = useCallback(() => {
+    toggleTheme()
+  }, [toggleTheme])
 
   useEffect(() => {
     if (previousPathnameRef.current === location.pathname) return
@@ -514,17 +522,6 @@ export default function HeaderSection() {
     previousPathnameRef.current = location.pathname
     setIsMobileMenuOpen(false)
   }, [location.pathname])
-
-  useEffect(() => {
-    function handleAvatarUpdated(event: Event) {
-      if (event instanceof CustomEvent && typeof event.detail === 'string') {
-        setProfileAvatarUrl(event.detail)
-      }
-    }
-
-    window.addEventListener(PROFILE_AVATAR_UPDATED_EVENT, handleAvatarUpdated)
-    return () => window.removeEventListener(PROFILE_AVATAR_UPDATED_EVENT, handleAvatarUpdated)
-  }, [])
 
   return (
     <Header className={styles.header}>
@@ -550,6 +547,18 @@ export default function HeaderSection() {
             className={styles.nav}
           />
 
+          <button
+            type="button"
+            className={`${styles.themeToggle} ${isDark ? styles.themeToggleDark : ''}`}
+            onClick={handleToggleTheme}
+            aria-label={isDark ? '切换到浅色主题' : '切换到深色主题'}
+          >
+            <span className={styles.themeToggleIcons}>
+              <MoonOutlined className={styles.themeToggleIconMoon} />
+              <SunOutlined className={styles.themeToggleIconSun} />
+            </span>
+          </button>
+
           <div className={styles.headerRight}>
             <Button
               type="text"
@@ -560,22 +569,40 @@ export default function HeaderSection() {
               aria-expanded={isMobileMenuOpen}
             />
 
-            <Tooltip title="打开个人主页" placement="bottomRight">
-              <Link
-                to="/profile"
-                className={`${styles.profileLink} ${isProfileActive ? styles.profileLinkActive : ''}`}
-                aria-label="打开个人主页"
-              >
-                <Avatar
-                  size={38}
-                  src={profileAvatarUrl}
-                  alt="林知夏的头像"
-                  className={styles.profileAvatar}
+            {isAuthenticated ? (
+              <Tooltip title="打开个人主页" placement="bottomRight">
+                <Link
+                  to="/profile"
+                  className={`${styles.profileLink} ${isProfileActive ? styles.profileLinkActive : ''}`}
+                  aria-label="打开个人主页"
                 >
-                  林
-                </Avatar>
-              </Link>
-            </Tooltip>
+                  <Avatar
+                    size={38}
+                    src="https://avatars.githubusercontent.com/u/187100212?v=4"
+                    alt="用户头像"
+                    className={styles.profileAvatar}
+                  >
+                    林
+                  </Avatar>
+                </Link>
+              </Tooltip>
+            ) : (
+              <Tooltip title="点击登录或注册" placement="bottomRight">
+                <Link
+                  to="/auth"
+                  className={`${styles.profileLink} ${isProfileActive ? styles.profileLinkActive : ''}`}
+                  aria-label="登录或注册"
+                >
+                  <Avatar
+                    size={38}
+                    alt="未登录"
+                    className={styles.profileAvatar}
+                  >
+                    <UserOutlined />
+                  </Avatar>
+                </Link>
+              </Tooltip>
+            )}
           </div>
         </div>
       </div>

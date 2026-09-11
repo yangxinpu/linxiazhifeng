@@ -1,5 +1,10 @@
 import { delay, http, HttpResponse } from 'msw'
-import type { EditableProfileFields, ProfilePreferences } from '@/api/profile'
+import type {
+  EditableProfileFields,
+  ProfilePreferences,
+  ProfileFavoriteQuote,
+  ProfileRecentArticle,
+} from '@/api/profile'
 import { createMockUserProfile } from '@mocks/fakers/profile.faker'
 
 const BASE_URL = '/api'
@@ -49,6 +54,31 @@ export const profileHandlers = [
       code: 0,
       message: '偏好设置已更新',
       data: profile.preferences,
+    })
+  }),
+
+  http.patch(`${BASE_URL}/profile/collections`, async ({ request }) => {
+    await delay(240)
+
+    const payload = (await request.json()) as {
+      favoriteQuotes?: ProfileFavoriteQuote[]
+      recentArticles?: ProfileRecentArticle[]
+    }
+
+    profile = {
+      ...profile,
+      favoriteQuotes: payload.favoriteQuotes ?? profile.favoriteQuotes,
+      recentArticles: payload.recentArticles ?? profile.recentArticles,
+      stats: {
+        ...profile.stats,
+        favoriteCount: payload.favoriteQuotes?.length ?? profile.stats.favoriteCount,
+      },
+    }
+
+    return HttpResponse.json({
+      code: 0,
+      message: '收藏已更新',
+      data: profile,
     })
   }),
 ]

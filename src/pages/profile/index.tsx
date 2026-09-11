@@ -1,12 +1,18 @@
 import { useCallback } from 'react'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import {
   AppstoreOutlined,
-  HeartOutlined,
+  InfoCircleOutlined,
+  StarOutlined,
   ReadOutlined,
 } from '@ant-design/icons'
 import { Button, Card, Result, Skeleton, Tabs, message, type TabsProps } from 'antd'
+import type { Dispatch } from '@reduxjs/toolkit'
 import type { EditableProfileFields, ProfilePreferences } from '@/api'
-import { notifyProfileAvatarUpdated } from '@/constants/profile-config'
+import { logout } from '@/api'
+import { clearAuth } from '@/stores/slices/auth-slice'
+import AboutPanel from './components/about-panel'
 import CollectionsPanel from './components/collections-panel'
 import OverviewPanel from './components/overview-panel'
 import PreferencesPanel from './components/preferences-panel'
@@ -17,6 +23,8 @@ import styles from './index.module.scss'
 /** 用户个人中心页面。 */
 export default function Profile() {
   const [messageApi, messageContext] = message.useMessage()
+  const dispatch = useDispatch<Dispatch>()
+  const navigate = useNavigate()
   const {
     profile,
     isLoading,
@@ -25,8 +33,36 @@ export default function Profile() {
     error,
     reloadProfile,
     saveProfile,
+    saveCollections,
     savePreferences,
   } = useProfile()
+
+  const handleCollectionsChange = useCallback(async (
+    payload: Parameters<typeof saveCollections>[0],
+  ) => {
+    const messageKey = 'profile-collections'
+    messageApi.open({
+      key: messageKey,
+      type: 'loading',
+      content: '正在更新...',
+      duration: 0,
+    })
+
+    try {
+      await saveCollections(payload)
+      messageApi.open({
+        key: messageKey,
+        type: 'success',
+        content: '收藏已更新',
+      })
+    } catch (saveError) {
+      messageApi.open({
+        key: messageKey,
+        type: 'error',
+        content: saveError instanceof Error ? saveError.message : '更新失败，请稍后重试',
+      })
+    }
+  }, [messageApi, saveCollections])
 
   const handleProfileChange = useCallback(async (
     editableProfile: EditableProfileFields,
@@ -40,8 +76,7 @@ export default function Profile() {
     })
 
     try {
-      const updatedProfile = await saveProfile(editableProfile)
-      notifyProfileAvatarUpdated(updatedProfile.avatarUrl)
+      await saveProfile(editableProfile)
       messageApi.open({
         key: messageKey,
         type: 'success',
@@ -83,6 +118,17 @@ export default function Profile() {
       })
     }
   }, [messageApi, savePreferences])
+
+  const handleLogout = useCallback(async () => {
+    try {
+      await logout()
+    } catch {
+      // 后端 logout 失败不影响本地清理
+    }
+    dispatch(clearAuth())
+    message.success('已退出登录')
+    navigate('/', { replace: true })
+  }, [dispatch, navigate])
 
   if (isLoading) {
     return (
@@ -128,8 +174,8 @@ export default function Profile() {
     {
       key: 'collections',
       label: '收藏与足迹',
-      icon: <HeartOutlined />,
-      children: <CollectionsPanel profile={profile} />,
+      icon: <StarOutlined />,
+      children: <CollectionsPanel profile={profile} onCollectionsChange={handleCollectionsChange} />,
     },
     {
       key: 'preferences',
@@ -143,6 +189,12 @@ export default function Profile() {
         />
       ),
     },
+    {
+      key: 'about',
+      label: '关于我们',
+      icon: <InfoCircleOutlined />,
+      children: <AboutPanel />,
+    },
   ]
 
   return (
@@ -153,6 +205,7 @@ export default function Profile() {
           profile={profile}
           isSaving={isSavingProfile}
           onProfileChange={handleProfileChange}
+          onLogout={handleLogout}
         />
         <Tabs
           defaultActiveKey="overview"

@@ -1,9 +1,12 @@
+import type { ArticleContentTheme } from '@/api/article/type'
+
 /** 用户累计阅读统计。 */
 export interface ProfileStats {
   readingDays: number
   streakDays: number
   totalMinutes: number
   favoriteCount: number
+  likeCount: number
 }
 
 /** 单日阅读记录。 */
@@ -32,7 +35,8 @@ export interface ProfileRecentArticle {
   id: number
   title: string
   author: string
-  category: string
+  /** 内容主题（contentThemeCategories 叶子 value），用于展示分类标签 */
+  contentTheme: ArticleContentTheme
   readProgress: number
   readAt: string
 }
@@ -49,6 +53,7 @@ export interface ProfilePreferences {
 export interface EditableProfileFields {
   displayName: string
   avatarUrl: string
+  bio: string
   email: string
   website: string
 }

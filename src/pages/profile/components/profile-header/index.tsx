@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import {
-  CalendarOutlined,
   ClockCircleOutlined,
   EditOutlined,
-  FireOutlined,
   HeartOutlined,
-  LinkOutlined,
-  MailOutlined,
+  LogoutOutlined,
+  StarOutlined,
   ReadOutlined,
   UploadOutlined,
 } from '@ant-design/icons'
@@ -18,6 +16,7 @@ import {
   Form,
   Input,
   Modal,
+  Popconfirm,
   Space,
   Statistic,
   Typography,
@@ -25,7 +24,6 @@ import {
   type UploadProps,
 } from 'antd'
 import type { EditableProfileFields, UserProfile } from '@/api'
-import { notifyProfileAvatarUpdated } from '@/constants/profile-config'
 import { formatDate } from '@/utils'
 import styles from './index.module.scss'
 
@@ -36,6 +34,7 @@ interface ProfileHeaderProps {
   profile: UserProfile
   isSaving: boolean
   onProfileChange: (profile: EditableProfileFields) => Promise<void>
+  onLogout: () => void
 }
 
 /** 展示用户资料并提供资料编辑入口。 */
@@ -43,6 +42,7 @@ export default function ProfileHeader({
   profile,
   isSaving,
   onProfileChange,
+  onLogout,
 }: ProfileHeaderProps) {
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [form] = Form.useForm<EditableProfileFields>()
@@ -63,6 +63,7 @@ export default function ProfileHeader({
     form.setFieldsValue({
       displayName: profile.displayName,
       avatarUrl: profile.avatarUrl,
+      bio: profile.bio,
       email: profile.email,
       website: profile.website,
     })
@@ -88,7 +89,6 @@ export default function ProfileHeader({
       if (typeof reader.result === 'string' && isEditOpenRef.current) {
         form.setFieldValue('avatarUrl', reader.result)
         form.setFields([{ name: 'avatarUrl', errors: [] }])
-        notifyProfileAvatarUpdated(reader.result)
       }
       avatarReaderRef.current = null
     })
@@ -119,7 +119,6 @@ export default function ProfileHeader({
     avatarReaderRef.current = null
     isEditOpenRef.current = false
     form.resetFields()
-    notifyProfileAvatarUpdated(profile.avatarUrl)
     setIsEditOpen(false)
   }
 
@@ -141,28 +140,44 @@ export default function ProfileHeader({
               <Title level={1} className={styles.profileName}>
                 {profile.displayName}
               </Title>
-              <Paragraph className={styles.bio}>{profile.bio}</Paragraph>
+              <div className={styles.mottoBlock}>
+                <span className={styles.mottoLabel}>座右铭</span>
+                <Paragraph className={styles.bio}>{profile.bio}</Paragraph>
+              </div>
 
               <Space size={[16, 6]} wrap className={styles.identityMeta}>
                 <Text>
-                  <MailOutlined />
+                  <span className={styles.metaLabel}>邮箱</span>                  
                   {profile.email}
                 </Text>
                 <ExternalLink href={profile.website} target="_blank" rel="noreferrer">
-                  <LinkOutlined />
+                  <span className={styles.metaLabel}>个人网站</span>
                   {profile.website}
                 </ExternalLink>
                 <Text>
-                  <CalendarOutlined />
-                  {formatDate(profile.joinedAt)} 加入
+                  <span className={styles.metaLabel}>注册时间</span>
+                  {formatDate(profile.joinedAt)} 
                 </Text>
               </Space>
             </div>
           </div>
 
-          <Button icon={<EditOutlined />} onClick={handleOpenEdit} className={styles.editProfileButton}>
-            编辑资料
-          </Button>
+          <Space size={8} className={styles.headerActions}>
+            <Popconfirm
+              title="确定要退出登录吗？"
+              okText="退出登录"
+              cancelText="再想想"
+              okButtonProps={{ danger: true }}
+              onConfirm={onLogout}
+            >
+              <Button danger icon={<LogoutOutlined />}>
+                退出登录
+              </Button>
+            </Popconfirm>
+            <Button icon={<EditOutlined />} onClick={handleOpenEdit} className={styles.editProfileButton}>
+              编辑资料
+            </Button>
+          </Space>
         </div>
 
         <Divider className={styles.profileDivider} />
@@ -172,16 +187,16 @@ export default function ProfileHeader({
             <Statistic prefix={<ReadOutlined />} title="阅读天数" value={profile.stats.readingDays} suffix="天" />
           </div>
           <div>
-            <Statistic prefix={<FireOutlined />} title="连续阅读" value={profile.stats.streakDays} suffix="天" />
+            <Statistic prefix={<ClockCircleOutlined />} title="累计时间" value={readingHours} suffix="小时" />
           </div>
           <div>
-            <Statistic prefix={<ClockCircleOutlined />} title="累计阅读" value={readingHours} suffix="小时" />
+            <Statistic prefix={<StarOutlined />} title="内容收藏" value={profile.stats.favoriteCount} />
           </div>
           <div>
-            <Statistic prefix={<HeartOutlined />} title="内容收藏" value={profile.stats.favoriteCount} />
+            <Statistic prefix={<HeartOutlined />} title="内容点赞" value={profile.stats.likeCount} />
           </div>
           <div>
-            <Statistic title="今日阅读" value={todayMinutes} suffix="分钟" />
+            <Statistic prefix={<ClockCircleOutlined />} title="今日阅读" value={todayMinutes} suffix="分钟" />
           </div>
         </div>
       </Card>
@@ -228,6 +243,21 @@ export default function ProfileHeader({
             ]}
           >
             <Input placeholder="请输入昵称" maxLength={20} showCount />
+          </Form.Item>
+
+          <Form.Item
+            name="bio"
+            label="座右铭"
+            rules={[
+              { max: 80, message: '座右铭不能超过 80 个字符' },
+            ]}
+          >
+            <Input.TextArea
+              placeholder="留下一句话，让它成为你阅读路上的注脚"
+              maxLength={80}
+              showCount
+              autoSize={{ minRows: 2, maxRows: 3 }}
+            />
           </Form.Item>
 
           <Form.Item

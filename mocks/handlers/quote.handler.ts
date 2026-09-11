@@ -1,6 +1,6 @@
 import { http, HttpResponse, delay } from 'msw'
 import type { UpdateQuoteEngagementParams } from '@/api/quote'
-import { createMockQuoteDetail, CATEGORY_OPTIONS } from '@mocks/fakers'
+import { createMockQuoteDetail, CATEGORY_OPTIONS, FORM_OPTIONS, REGION_OPTIONS } from '@mocks/fakers'
 import { mockQuotes } from '@mocks/data/content.data'
 
 const BASE_URL = '/api'
@@ -12,7 +12,11 @@ export const quoteHandlers = [
     return HttpResponse.json({
       code: 0,
       message: '请求成功',
-      data: CATEGORY_OPTIONS,
+      data: {
+        categories: CATEGORY_OPTIONS,
+        forms: FORM_OPTIONS,
+        regions: REGION_OPTIONS,
+      },
     })
   }),
 
@@ -39,11 +43,19 @@ export const quoteHandlers = [
     const url = new URL(request.url)
     const page = Number(url.searchParams.get('page')) || 1
     const pageSize = Number(url.searchParams.get('pageSize')) || 10
-    const category = url.searchParams.get('category')
+    const forms = url.searchParams.getAll('form')
+    const regions = url.searchParams.getAll('region')
 
     let filtered = mockQuotes
-    if (category) {
-      filtered = filtered.filter((q) => q.category === category)
+    const categories = url.searchParams.getAll('category')
+    if (categories.length > 0 && !(categories.length === 1 && categories[0] === 'all')) {
+      filtered = filtered.filter((q) => categories.includes(q.category))
+    }
+    if (forms.length > 0) {
+      filtered = filtered.filter((q) => q.form && forms.includes(q.form))
+    }
+    if (regions.length > 0) {
+      filtered = filtered.filter((q) => q.region && regions.includes(q.region))
     }
 
     const sorted = [...filtered].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())

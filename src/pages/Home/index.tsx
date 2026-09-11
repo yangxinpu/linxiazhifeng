@@ -1,26 +1,18 @@
 import {
-  ArrowRightOutlined,
   BookOutlined, 
   MessageOutlined,
   ReadOutlined,
 } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
-import type { Article, Quote } from '@/api'
+import type { Quote } from '@/api'
 import { formatDate } from '@/utils'
+import {
+  contentThemeCategories,
+  getCategoryLabel,
+} from '@/constants/article-category'
 import LeafSphere from './components/leaf-sphere'
 import { useHomeContent } from './hooks/use-home-content'
 import styles from './index.module.scss'
-
-const ARTICLE_CATEGORY_LABELS: Record<Article['category'], string> = {
-  technology: '科技',
-  philosophy: '哲学',
-  literature: '文学',
-  science: '科学',
-  life: '生活',
-  wisdom: '智慧',
-  art: '艺术',
-  history: '历史',
-}
 
 function getQuotePath(quote: Quote): string {
   return `/quote/${quote.id}`
@@ -62,14 +54,12 @@ export default function Home() {
                     <span>《{featuredQuote.source}》</span>
                   </footer>
                 </blockquote>
-                <ArrowRightOutlined className={styles.heroQuoteArrow} aria-hidden="true" />
               </Link>
             )}
 
             <div className={styles.heroActions}>
               <Link to="/articles" className={styles.primaryAction}>
                 开始阅读
-                <ArrowRightOutlined aria-hidden="true" />
               </Link>
               <Link to="/quotes" className={styles.secondaryAction}>
                 浏览名言
@@ -93,7 +83,6 @@ export default function Home() {
                 <h3>经典文章</h3>
                 <p>从文学、哲学、历史与科学中，建立更完整的理解</p>
               </div>
-              <ArrowRightOutlined className={styles.pathArrow} aria-hidden="true" />
             </Link>
 
             <Link to="/quotes" className={styles.pathItem}>
@@ -103,7 +92,6 @@ export default function Home() {
                 <h3>思想短句</h3>
                 <p>用一段凝练的文字，为忙碌的一天留下思考的间隙</p>
               </div>
-              <ArrowRightOutlined className={styles.pathArrow} aria-hidden="true" />
             </Link>
 
             <Link to="/profile" className={styles.pathItem}>
@@ -113,7 +101,6 @@ export default function Home() {
                 <h3>阅读足迹</h3>
                 <p>回看阅读记录与年度绿墙，让持续阅读变得清晰可见</p>
               </div>
-              <ArrowRightOutlined className={styles.pathArrow} aria-hidden="true" />
             </Link>
           </div>
         </div>
@@ -127,7 +114,6 @@ export default function Home() {
             </div>
             <Link to="/articles" className={styles.textLink}>
               查看全部
-              <ArrowRightOutlined aria-hidden="true" />
             </Link>
           </header>
 
@@ -156,14 +142,13 @@ export default function Home() {
                   </span>
                   <div className={styles.articleBody}>
                     <div className={styles.articleMeta}>
-                      <span>{ARTICLE_CATEGORY_LABELS[article.category]}</span>
+                      <span>{getCategoryLabel(contentThemeCategories, article.contentTheme)}</span>
                       <span>{formatDate(article.createdAt)}</span>
                       <span>{article.author}</span>
                     </div>
                     <h3>{article.title}</h3>
                     <p>{article.summary}</p>
                   </div>
-                  <ArrowRightOutlined className={styles.articleArrow} aria-hidden="true" />
                 </Link>
               ))}
             </div>
@@ -209,7 +194,6 @@ export default function Home() {
           <h2>每天读一点，让理解自然生长</h2>
           <Link to="/articles" className={styles.closingAction}>
             继续阅读
-            <ArrowRightOutlined aria-hidden="true" />
           </Link>
         </div>
       </section>

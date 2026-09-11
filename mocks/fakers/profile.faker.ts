@@ -1,5 +1,7 @@
 import type { UserProfile } from '@/api/profile'
-import { DEFAULT_PROFILE_AVATAR_URL } from '@/constants/profile-config'
+import { mockArticles, mockQuotes } from '@mocks/data/content.data'
+
+const DEFAULT_AVATAR = 'https://avatars.githubusercontent.com/u/187100212?v=4'
 
 /** 生成稳定的年度阅读记录，未来日期保持为空白。 */
 function createReadingCalendar(year: number): UserProfile['readingCalendars'][number] {
@@ -28,11 +30,50 @@ function createReadingCalendar(year: number): UserProfile['readingCalendars'][nu
 
 const currentYear = new Date().getUTCFullYear()
 
+/** 从共享 mockQuotes 中挑选收藏名言，确保 id→内容 与 quote 详情页一致 */
+const FAVORITE_QUOTE_IDS = [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38, 41, 44, 47, 50, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39]
+
+const favoriteQuotes: UserProfile['favoriteQuotes'] = FAVORITE_QUOTE_IDS
+  .map((id) => {
+    const quote = mockQuotes.find((q) => q.id === id)
+    if (!quote) return null
+    // 从最近时间向前推算收藏时间
+    const daysAgo = FAVORITE_QUOTE_IDS.indexOf(id) * 2 + 1
+    const collectedAt = new Date(Date.now() - daysAgo * 86400000).toISOString()
+    return {
+      id: quote.id,
+      content: quote.content,
+      author: quote.author,
+      source: quote.source,
+      collectedAt,
+    }
+  })
+  .filter((item): item is UserProfile['favoriteQuotes'][number] => item !== null)
+
+/** 从共享 mockArticles 中生成最近阅读记录，确保 id→文章 与 article 详情页一致 */
+const recentArticles: UserProfile['recentArticles'] = mockArticles
+  .slice()
+  .sort((a, b) => b.id - a.id)
+  .slice(0, 12)
+  .map((article, index) => {
+    const daysAgo = index * 3
+    const readAt = new Date(Date.now() - daysAgo * 86400000).toISOString()
+    const readProgress = [100, 76, 42, 100, 88, 60, 100, 34, 100, 72, 50, 100][index] || 68
+    return {
+      id: article.id,
+      title: article.title,
+      author: article.author,
+      contentTheme: article.contentTheme,
+      readProgress,
+      readAt,
+    }
+  })
+
 const MOCK_USER_PROFILE: UserProfile = {
   id: 10001,
   displayName: '林知夏',
   username: 'linxia_reader',
-  avatarUrl: DEFAULT_PROFILE_AVATAR_URL,
+  avatarUrl: DEFAULT_AVATAR,
   bio: '在文字里寻找缓慢而坚定的力量。偏爱古典文学、哲思随笔，也记录每一次被句子击中的瞬间。',
   email: 'linxia@example.com',
   website: 'https://linxia.reading.cn',
@@ -42,61 +83,15 @@ const MOCK_USER_PROFILE: UserProfile = {
     readingDays: 428,
     streakDays: 36,
     totalMinutes: 18640,
-    favoriteCount: 286,
+    favoriteCount: favoriteQuotes.length,
+    likeCount: 512,
   },
   readingCalendars: [
     createReadingCalendar(currentYear),
     createReadingCalendar(currentYear - 1),
   ],
-  favoriteQuotes: [
-    {
-      id: 2,
-      content: '且视他人之疑目如盏盏鬼火，大胆地去走你的夜路。',
-      author: '史铁生',
-      source: '病隙碎笔',
-      collectedAt: '2026-09-09T13:20:00.000Z',
-    },
-    {
-      id: 4,
-      content: '人生天地之间，若白驹之过隙，忽然而已。',
-      author: '庄子',
-      source: '知北游',
-      collectedAt: '2026-09-07T09:12:00.000Z',
-    },
-    {
-      id: 7,
-      content: '世界上只有一种真正的英雄主义，就是认清生活的真相后依然热爱生活。',
-      author: '罗曼·罗兰',
-      source: '米开朗琪罗传',
-      collectedAt: '2026-09-02T16:40:00.000Z',
-    },
-  ],
-  recentArticles: [
-    {
-      id: 5,
-      title: '慢生活的艺术：在快节奏时代寻找内心的平静',
-      author: '林静心',
-      category: '人生',
-      readProgress: 100,
-      readAt: '2026-09-10T04:28:00.000Z',
-    },
-    {
-      id: 2,
-      title: '庄子的逍遥游：追求精神的绝对自由',
-      author: '李思远',
-      category: '哲学',
-      readProgress: 76,
-      readAt: '2026-09-09T14:35:00.000Z',
-    },
-    {
-      id: 3,
-      title: '《红楼梦》中的人生智慧：从贾宝玉看人性',
-      author: '王文心',
-      category: '文学',
-      readProgress: 42,
-      readAt: '2026-09-08T11:06:00.000Z',
-    },
-  ],
+  favoriteQuotes,
+  recentArticles,
   preferences: {
     dailyGoalMinutes: 30,
     readingDensity: 'comfortable',

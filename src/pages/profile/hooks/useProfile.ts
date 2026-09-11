@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import {
   getUserProfile,
+  updateProfileCollections,
   updateProfilePreferences,
   updateUserProfile,
   type EditableProfileFields,
@@ -21,45 +22,48 @@ export function useProfile() {
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const loadProfile = useCallback(async (signal?: AbortSignal) => {
-    try {
-      const response = await getUserProfile(signal)
-      if (!signal?.aborted) {
-        setProfile(response.data)
-      }
-    } catch (requestError) {
-      if (!signal?.aborted) {
-        setError(getProfileErrorMessage(requestError))
-      }
-    } finally {
-      if (!signal?.aborted) {
-        setIsLoading(false)
-      }
-    }
+  const fetchProfile = useCallback(async (signal?: AbortSignal): Promise<UserProfile> => {
+    const response = await getUserProfile(signal)
+    return response.data
   }, [])
 
   useEffect(() => {
     const controller = new AbortController()
+    let isMounted = true
 
-    getUserProfile(controller.signal)
-      .then((response) => {
-        if (!controller.signal.aborted) {
-          setProfile(response.data)
+    fetchProfile(controller.signal)
+      .then((data) => {
+        if (isMounted && !controller.signal.aborted) {
+          setProfile(data)
+          setError(null)
         }
       })
-      .catch((requestError: unknown) => {
-        if (!controller.signal.aborted) {
+      .catch((requestError) => {
+        if (isMounted && !controller.signal.aborted) {
           setError(getProfileErrorMessage(requestError))
         }
       })
       .finally(() => {
-        if (!controller.signal.aborted) {
+        if (isMounted && !controller.signal.aborted) {
           setIsLoading(false)
         }
       })
 
-    return () => controller.abort()
-  }, [])
+    return () => {
+      isMounted = false
+      controller.abort()
+    }
+  }, [fetchProfile])
+
+  const reloadProfile = useCallback(() => {
+    setIsLoading(true)
+    setError(null)
+    const controller = new AbortController()
+    void fetchProfile(controller.signal)
+      .then((data) => setProfile(data))
+      .catch((requestError) => setError(getProfileErrorMessage(requestError)))
+      .finally(() => setIsLoading(false))
+  }, [fetchProfile])
 
   const savePreferences = useCallback(async (preferences: Partial<ProfilePreferences>) => {
     setIsSaving(true)
@@ -87,11 +91,13 @@ export function useProfile() {
     }
   }, [])
 
-  const reloadProfile = useCallback(() => {
-    setIsLoading(true)
-    setError(null)
-    void loadProfile()
-  }, [loadProfile])
+  const saveCollections = useCallback(async (
+    payload: Parameters<typeof updateProfileCollections>[0],
+  ) => {
+    const response = await updateProfileCollections(payload)
+    setProfile(response.data)
+    return response.data
+  }, [])
 
   return {
     profile,
@@ -101,6 +107,7 @@ export function useProfile() {
     error,
     reloadProfile,
     saveProfile,
+    saveCollections,
     savePreferences,
   }
 }

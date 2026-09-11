@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker/locale/zh_CN'
+import type { QuoteForm, QuoteRegion } from '@/api/quote/type'
 
 export interface MockQuote {
   id: number
@@ -6,6 +7,8 @@ export interface MockQuote {
   author: string
   source: string
   category: 'philosophy' | 'literature' | 'science' | 'life' | 'wisdom' | 'love' | 'friendship' | 'success' | 'courage' | 'education' | 'nature' | 'art' | 'history'
+  form: QuoteForm
+  region: QuoteRegion
   detailId: number
   background?: string
   viewCount: number
@@ -23,6 +26,8 @@ export interface MockQuoteDetail {
   author: string
   source: string
   category: 'philosophy' | 'literature' | 'science' | 'life' | 'wisdom' | 'love' | 'friendship' | 'success' | 'courage' | 'education' | 'nature' | 'art' | 'history'
+  form: QuoteForm
+  region: QuoteRegion
   authorBio: string
   story: string
   background: string
@@ -40,7 +45,7 @@ export interface MockCategory {
 }
 
 export const CATEGORY_OPTIONS: MockCategory[] = [
-  { value: '', label: '全部' },
+  { value: 'all', label: '全部' },
   { value: 'philosophy', label: '哲学' },
   { value: 'literature', label: '文学' },
   { value: 'science', label: '科学' },
@@ -56,6 +61,21 @@ export const CATEGORY_OPTIONS: MockCategory[] = [
   { value: 'history', label: '历史' },
 ]
 
+export const FORM_OPTIONS: MockCategory[] = [
+  { value: 'all', label: '全部' },
+  { value: 'proverb', label: '格言' },
+  { value: 'aphorism', label: '警句' },
+  { value: 'poetry', label: '诗词' },
+  { value: 'literary', label: '文句名言' },
+  { value: 'folk', label: '谚语俗语' },
+]
+
+export const REGION_OPTIONS: MockCategory[] = [
+  { value: 'all', label: '全部' },
+  { value: 'china', label: '中国名言' },
+  { value: 'foreign', label: '外国名言' },
+]
+
 const QUOTE_POOL: Omit<
   MockQuote,
   | 'id'
@@ -66,6 +86,8 @@ const QUOTE_POOL: Omit<
   | 'favoriteCount'
   | 'isLiked'
   | 'isFavorited'
+  | 'form'
+  | 'region'
 >[] = [
   { content: '不是看到希望才坚持，而是坚持了才看到希望', author: '佚名', source: '励志箴言', category: 'life' },
   { content: '你受的苦，会照亮你的路', author: '佚名', source: '人生感悟', category: 'life' },
@@ -270,11 +292,41 @@ const DETAIL_STORIES: Record<string, { authorBio: string; story: string; backgro
   },
 }
 
+/** 推断名言地域：基于作者名是否为中文名 */
+function inferRegion(author: string): QuoteRegion {
+  if (author === '佚名') return 'china'
+  // 中文名一般 2-4 个中文字符，外国名带间隔符或较长
+  if (/^[\u4e00-\u9fa5]{2,4}$/.test(author)) return 'china'
+  return 'foreign'
+}
+
+/** 推断名言文体：基于内容长度、句式、来源 */
+function inferForm(content: string, source: string, region: QuoteRegion): QuoteForm {
+  // 来源含诗/词/骚/赋 → 诗词
+  if (/(诗|词|赋|离骚|临江仙|饮酒|周易|论语|孟子|道德经|庄子|齐物论|养生主|大宗师|秋水|逍遥游|资治通鉴|史记|古文观止)/.test(source)) {
+    return 'poetry'
+  }
+
+  if (region === 'china') {
+    // 古文风（六言以上，含"之""乎""者""也""矣"）→ 文句名言
+    if (/[之乎者也矣焉哉]/.test(content) && content.length >= 8) return 'literary'
+    // 四言/八言对仗 → 格言
+    if (/^.{4,8}[，,、]?.{0,8}$/.test(content) && content.length <= 14) return 'proverb'
+    // 佚名且短 → 谚语俗语
+    return 'folk'
+  }
+
+  // 外国：短 → 警句，长 → 文句名言
+  return content.length <= 18 ? 'aphorism' : 'literary'
+}
+
 export function createMockQuote(id: number, overrides?: Partial<MockQuote>): MockQuote {
   const base = faker.helpers.arrayElement(QUOTE_POOL)
   const detailId = faker.number.int({ min: 1, max: 10000 })
   const authorInfo = DETAIL_STORIES[base.author]
-  
+  const region = overrides?.region ?? inferRegion(base.author)
+  const form = overrides?.form ?? inferForm(base.content, base.source, region)
+
   return {
     id,
     detailId,
@@ -286,6 +338,8 @@ export function createMockQuote(id: number, overrides?: Partial<MockQuote>): Moc
     isFavorited: faker.datatype.boolean({ probability: 0.2 }),
     createdAt: faker.date.recent({ days: 30 }).toISOString(),
     ...base,
+    form,
+    region,
     ...overrides,
   }
 }
@@ -308,6 +362,8 @@ export function createMockQuoteDetail(quote: MockQuote): MockQuoteDetail {
     author: quote.author,
     source: quote.source,
     category: quote.category,
+    form: quote.form,
+    region: quote.region,
     authorBio: authorInfo.authorBio,
     story: authorInfo.story,
     background: authorInfo.background,

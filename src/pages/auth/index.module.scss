@@ -1,0 +1,97 @@
+.page {
+  min-height: calc(100vh - var(--header-height));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  background: var(--background);
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+}
+
+.skipAction {
+  position: absolute;
+  top: -44px;
+  right: 0;
+  z-index: 1;
+  font-size: 13px;
+}
+
+.card {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-2);
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.brandTitle {
+  margin: 0 0 8px;
+  color: var(--primary);
+  font-family: var(--font-quote);
+}
+
+.brandTagline {
+  color: var(--muted-foreground);
+}
+
+.tabs {
+  :global(.ant-tabs-nav) {
+    margin-bottom: 24px;
+  }
+}
+
+.authForm {
+  :global(.ant-form-item-label > label) {
+    font-weight: 500;
+  }
+}
+
+.inputIcon {
+  color: var(--muted-foreground);
+}
+
+.submitItem {
+  margin-top: 24px;
+  margin-bottom: 12px;
+}
+
+.formFooter {
+  text-align: center;
+  color: var(--muted-foreground);
+  font-size: 13px;
+}
+
+.demoHint {
+  margin-top: 16px;
+  padding: 8px 12px;
+  background: var(--secondary);
+  border-radius: var(--radius-md);
+  color: var(--muted-foreground);
+  font-size: 12px;
+  text-align: center;
+}
+
+.welcomeContent {
+  text-align: center;
+  padding: 16px 0 8px;
+}
+
+.welcomeIcon {
+  font-size: 36px;
+  color: var(--primary);
+  margin-bottom: 16px;
+}
+
+.welcomeTip {
+  margin-bottom: 0;
+  font-size: 12px;
+}

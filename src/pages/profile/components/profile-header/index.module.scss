@@ -88,11 +88,29 @@
 
 .bio {
   &:global(.ant-typography) {
-    max-width: 600px;
-    margin: 12px 0 10px;
+    max-width: 60
+    0px;
+    margin: 0;
     color: color-mix(in srgb, var(--foreground) 78%, transparent);
     line-height: 1.7;
   }
+}
+
+.mottoBlock {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 14px 0 10px;
+}
+
+.mottoLabel {
+  flex: 0 0 auto;
+  padding-top: 3px;
+  color: color-mix(in srgb, var(--primary) 82%, var(--foreground));
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 .identityMeta {
@@ -111,6 +129,11 @@
       color: var(--brand-b-hover);
     }
   }
+}
+
+.metaLabel {
+  color: color-mix(in srgb, var(--muted-foreground) 60%, var(--foreground));
+  font-weight: 500;
 }
 
 .editProfileButton {

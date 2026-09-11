@@ -46,6 +46,7 @@ const DARK_THEME_TOKENS: NonNullable<ThemeConfig['token']> = {
 }
 
 const Main = lazy(() => import('@/layout/main/index'))
+const Auth = lazy(() => import('@/pages/auth'))
 const Home = lazy(() => import('@/pages/home'))
 const Quote = lazy(() => import('@/pages/quote'))
 const QuoteDetail = lazy(() => import('@/pages/quote-detail'))
@@ -79,6 +80,7 @@ export default function App() {
       <BrowserRouter>
         <Suspense fallback={<AppSkeleton />}>
           <Routes>
+            <Route path="/auth" element={<Auth />} />
             <Route path="/" element={<Main />}>
               <Route index element={<Home />} />
               <Route path="quotes" element={<Quote />} />

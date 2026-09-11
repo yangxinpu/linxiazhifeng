@@ -1,8 +1,14 @@
 import { http, HttpResponse, delay } from 'msw'
 import type { SearchResult } from '@/api/search'
 import { mockArticles, mockQuotes } from '@mocks/data/content.data'
-import { ARTICLE_CATEGORIES } from '@mocks/fakers/article.faker'
 import { CATEGORY_OPTIONS } from '@mocks/fakers/quote.faker'
+import {
+  contentThemeCategories,
+  expressionStyleCategories,
+  sourceAttributeCategories,
+  timeRegionCategories,
+  getCategoryLabel,
+} from '@/constants/article-category'
 
 const BASE_URL = '/api'
 const DEFAULT_RESULT_LIMIT = 8
@@ -15,7 +21,6 @@ interface SearchDocument {
 }
 
 const quoteCategoryLabels = new Map(CATEGORY_OPTIONS.map((item) => [item.value, item.label]))
-const articleCategoryLabels = new Map(ARTICLE_CATEGORIES.map((item) => [item.value, item.label]))
 
 const searchDocuments: SearchDocument[] = [
   ...mockQuotes.map((quote, index) => ({
@@ -47,7 +52,10 @@ const searchDocuments: SearchDocument[] = [
       article.summary,
       article.author,
       ...article.tags,
-      articleCategoryLabels.get(article.category) ?? article.category,
+      getCategoryLabel(contentThemeCategories, article.contentTheme),
+      getCategoryLabel(expressionStyleCategories, article.expressionStyle),
+      getCategoryLabel(sourceAttributeCategories, article.sourceAttribute),
+      getCategoryLabel(timeRegionCategories, article.timeRegion),
     ],
     popularity: article.likeCount,
   })),

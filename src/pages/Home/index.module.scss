@@ -30,7 +30,6 @@
 
 .hero {
   position: relative;
-  border-bottom: 1px solid var(--border);
 }
 
 .heroInner,
@@ -92,22 +91,6 @@
   animation: visualReveal 760ms cubic-bezier(0.4, 0, 0.2, 1) 180ms forwards;
 }
 
-.eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 22px;
-  color: var(--muted-foreground);
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.eyebrowMark {
-  width: 30px;
-  height: 2px;
-  background: var(--brand-b);
-}
-
 .title {
   display: flex;
   flex-wrap: wrap;
@@ -124,7 +107,7 @@
 }
 
 .intro {
-  max-width: 560px;
+  max-width: 580px;
   color: color-mix(in srgb, var(--foreground) 78%, var(--muted-foreground));
   font-size: 18px;
   line-height: 1.9;
@@ -133,7 +116,7 @@
 .heroQuote {
   display: grid;
   max-width: 600px;
-  grid-template-columns: minmax(0, 1fr) 24px;
+  grid-template-columns: minmax(0, 1fr);
   align-items: center;
   gap: 16px;
   margin-top: 36px;
@@ -170,18 +153,7 @@
   &:hover,
   &:focus-visible {
     border-color: var(--accent-border);
-
-    .heroQuoteArrow {
-      color: var(--primary);
-      transform: translateX(4px);
-    }
   }
-}
-
-.heroQuoteArrow {
-  color: var(--muted-foreground);
-  font-size: 15px;
-  transition: color 180ms ease, transform 180ms ease;
 }
 
 .heroActions {
@@ -262,7 +234,7 @@
   display: grid;
   min-width: 0;
   min-height: 250px;
-  grid-template-columns: 34px minmax(0, 1fr) 24px;
+  grid-template-columns: 34px minmax(0, 1fr);
   align-content: start;
   gap: 20px;
   padding: 30px;
@@ -277,13 +249,8 @@
   &:focus-visible {
     background: var(--card);
 
-    .pathIcon,
-    .pathArrow {
+    .pathIcon {
       color: var(--primary);
-    }
-
-    .pathArrow {
-      transform: translateX(4px);
     }
   }
 }
@@ -318,13 +285,6 @@
   }
 }
 
-.pathArrow {
-  align-self: center;
-  color: var(--muted-foreground);
-  font-size: 14px;
-  transition: color 180ms ease, transform 180ms ease;
-}
-
 .latestSection {
   border-block: 1px solid var(--border);
   background: var(--card);
@@ -356,10 +316,11 @@
   font-size: 13px;
   font-weight: 650;
   transition: color 160ms ease, transform 160ms ease;
-
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
   &:hover {
     color: var(--primary);
-    transform: translateX(3px);
   }
 }
 
@@ -369,7 +330,7 @@
 
 .articleItem {
   display: grid;
-  grid-template-columns: 72px minmax(0, 1fr) 36px;
+  grid-template-columns: 72px minmax(0, 1fr);
   align-items: center;
   gap: 24px;
   padding: 30px 12px;
@@ -380,13 +341,8 @@
   &:focus-visible {
     background: var(--hover);
 
-    .articleBody h3,
-    .articleArrow {
+    .articleBody h3 {
       color: var(--primary);
-    }
-
-    .articleArrow {
-      transform: translateX(4px);
     }
   }
 }
@@ -437,12 +393,6 @@
     color: var(--primary);
     font-weight: 700;
   }
-}
-
-.articleArrow {
-  color: var(--muted-foreground);
-  font-size: 15px;
-  transition: color 180ms ease, transform 180ms ease;
 }
 
 .articleSkeletons {
@@ -503,11 +453,6 @@
 
 .quotesSection {
   background: var(--background);
-}
-
-.sectionSymbol {
-  color: var(--brand-b);
-  font-size: 30px;
 }
 
 .quoteGrid {
@@ -659,10 +604,6 @@
     }
   }
 
-  .heroQuoteArrow {
-    display: none;
-  }
-
   .heroActions {
     margin-top: 22px;
   }
@@ -733,10 +674,6 @@
 
   .articleMeta {
     gap: 6px 12px;
-  }
-
-  .articleArrow {
-    display: none;
   }
 
   .articleSkeleton {

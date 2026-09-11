@@ -10,7 +10,7 @@ import {
   UserOutlined as User,
 } from '@ant-design/icons'
 import { getCategories, getQuoteDetail, updateQuoteEngagement } from '@/api'
-import type { Category, QuoteDetail, QuoteEngagementType } from '@/api'
+import type { QuoteDetail, QuoteEngagementType } from '@/api'
 import { useScrollDownVisibility } from '@/hooks'
 import { formatDate } from '@/utils'
 import PageSkeleton from '@/components/page-skeleton'
@@ -22,7 +22,7 @@ export default function QuoteDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [quote, setQuote] = useState<QuoteDetail | null>(null)
-  const [categories, setCategories] = useState<Category[]>([])
+  const [categoryOptions, setCategoryOptions] = useState<{ value: string; label: string }[]>([])
   const [loadedRouteId, setLoadedRouteId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [updatingEngagement, setUpdatingEngagement] = useState<QuoteEngagementType | null>(null)
@@ -70,7 +70,7 @@ export default function QuoteDetailPage() {
 
     getCategories().then((res) => {
       if (isActive && res.code === 0 && res.data) {
-        setCategories(res.data)
+        setCategoryOptions(res.data.categories)
       }
     }).catch(() => {})
 
@@ -138,7 +138,7 @@ export default function QuoteDetailPage() {
     )
   }
 
-  const categoryLabel = categories.find(c => c.value === quote.category)?.label ?? quote.category
+  const categoryLabel = categoryOptions.find(c => c.value === quote.category)?.label ?? quote.category
 
   return (
     <section className={styles.section}>

@@ -21,7 +21,9 @@
   }
 
   :global(.ant-card-body) {
+    max-height: 520px;
     padding: 20px;
+    overflow-y: auto;
   }
 }
 
@@ -137,6 +139,29 @@
     font-size: 12px;
     font-weight: 650;
   }
+}
+
+.quoteItemMarked {
+  &:global(.ant-list-item) {
+    background: color-mix(in srgb, var(--error) 7%, transparent);
+
+    .favoriteQuote,
+    .quoteAuthor,
+    .mutedText {
+      color: color-mix(in srgb, var(--foreground) 50%, var(--muted-foreground));
+      text-decoration: line-through;
+      text-decoration-color: color-mix(in srgb, var(--error) 45%, transparent);
+      text-decoration-thickness: 1px;
+    }
+  }
+}
+
+.listLoading,
+.listEnd {
+  padding: 16px 0;
+  color: var(--muted-foreground);
+  font-size: 12px;
+  text-align: center;
 }
 
 @media (max-width: 899px) {

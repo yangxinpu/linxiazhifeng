@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
   ArrowLeftOutlined as ArrowLeft,
-  CalendarOutlined as Calendar,
   EyeOutlined as Eye,
   HeartFilled,
   HeartOutlined as Heart,
@@ -220,13 +219,7 @@ export default function ArticleDetailPage() {
               </div>
 
               <div className={styles.metaItem}>
-                <Calendar className={styles.metaIcon} />
                 <span>{formatDate(article.createdAt, { monthFormat: 'long' })}</span>
-              </div>
-
-              <div className={styles.metaItem}>
-                <Heart className={styles.metaIcon} />
-                <span>{article.likeCount}</span>
               </div>
             </div>
           </div>

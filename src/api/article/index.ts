@@ -3,14 +3,14 @@ export type * from './type'
 import { get, patch } from '../http-client'
 import type {
   Article,
-  ArticleDetail,
+  ArticleCategories,
   ArticleEngagement,
   UpdateArticleEngagementParams,
 } from './type'
-import type { Category, PaginatedResponse, ApiResponse } from '../global-type'
+import type { PaginatedResponse, ApiResponse } from '../global-type'
 
-export const getArticleCategories = async (): Promise<ApiResponse<Category[]>> => 
-  get<Category[]>('/articles/categories')
+export const getArticleCategories = async (): Promise<ApiResponse<ArticleCategories>> =>
+  get<ArticleCategories>('/articles/categories')
 
 export const getLatestArticles = async (params?: { limit?: number }): Promise<ApiResponse<Article[]>> => 
   get<Article[]>('/articles/latest', params as Record<string, unknown>)
@@ -25,9 +25,6 @@ export const getArticleList = async (params?: {
 
 export const getArticleById = async (id: number): Promise<ApiResponse<Article>> => 
   get<Article>(`/articles/${id}`)
-
-export const getArticleDetail = async (id: number): Promise<ApiResponse<ArticleDetail>> => 
-  get<ArticleDetail>(`/articles/${id}/detail`)
 
 /** 更新文章的点赞或收藏状态。 */
 export function updateArticleEngagement(
