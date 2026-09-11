@@ -22,47 +22,14 @@ const ARTICLE_CATEGORY_LABELS: Record<Article['category'], string> = {
   history: '历史',
 }
 
-const FALLBACK_QUOTE = {
-  content: '未经审视的人生不值得过',
-  author: '苏格拉底',
-  source: '申辩篇',
-}
-
-const FALLBACK_QUOTES = [
-  {
-    content: '知人者智，自知者明',
-    author: '老子',
-    source: '道德经',
-  },
-  {
-    content: '人生如逆旅，我亦是行人',
-    author: '苏轼',
-    source: '临江仙',
-  },
-  {
-    content: '想象力比知识更重要',
-    author: '爱因斯坦',
-    source: '论科学',
-  },
-]
-
-interface QuotePreview {
-  id?: Quote['id']
-  content: string
-  author: string
-  source: string
-}
-
-function getQuotePath(quote: QuotePreview): string {
-  return quote.id ? `/quote/${quote.id}` : '/quotes'
+function getQuotePath(quote: Quote): string {
+  return `/quote/${quote.id}`
 }
 
 export default function Home() {
   const { articles, quotes, isLoading, error } = useHomeContent()
-  const featuredQuote: QuotePreview = quotes[0] ?? FALLBACK_QUOTE
-  const quotePreviews: QuotePreview[] = quotes.length > 1
-    ? quotes.slice(1, 4)
-    : FALLBACK_QUOTES
+  const featuredQuote = quotes[0]
+  const quotePreviews = quotes.slice(1, 4)
 
   return (
     <main className={styles.page}>
@@ -82,20 +49,22 @@ export default function Home() {
               在经典文字与当代思考之间，留一处可以慢下来阅读、理解和沉淀的地方
             </p>
 
-            <Link
-              to={getQuotePath(featuredQuote)}
-              className={styles.heroQuote}
-              aria-label={`阅读${featuredQuote.author}的名言详情`}
-            >
-              <blockquote>
-                <p>“{featuredQuote.content}”</p>
-                <footer>
-                  {featuredQuote.author}
-                  <span>《{featuredQuote.source}》</span>
-                </footer>
-              </blockquote>
-              <ArrowRightOutlined className={styles.heroQuoteArrow} aria-hidden="true" />
-            </Link>
+            {featuredQuote && (
+              <Link
+                to={getQuotePath(featuredQuote)}
+                className={styles.heroQuote}
+                aria-label={`阅读${featuredQuote.author}的名言详情`}
+              >
+                <blockquote>
+                  <p>“{featuredQuote.content}”</p>
+                  <footer>
+                    {featuredQuote.author}
+                    <span>《{featuredQuote.source}》</span>
+                  </footer>
+                </blockquote>
+                <ArrowRightOutlined className={styles.heroQuoteArrow} aria-hidden="true" />
+              </Link>
+            )}
 
             <div className={styles.heroActions}>
               <Link to="/articles" className={styles.primaryAction}>

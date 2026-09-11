@@ -2,11 +2,9 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
   ArrowLeftOutlined as ArrowLeft,
-  BookOutlined as BookOpen,
   EyeOutlined as Eye,
   HeartFilled,
   HeartOutlined as Heart,
-  MessageOutlined as Quote,
   StarFilled,
   StarOutlined as Star,
   UserOutlined as User,
@@ -212,8 +210,6 @@ export default function QuoteDetailPage() {
               <span className={styles.tag}>{categoryLabel}</span>
             </div>
 
-            <Quote className={styles.quoteIcon} aria-hidden="true" />
-
             <h1 className={styles.quoteContent}>
               {quote.content}
             </h1>
@@ -232,13 +228,7 @@ export default function QuoteDetailPage() {
               </div>
 
               <div className={styles.metaItem}>
-                <BookOpen className={styles.metaIcon} />
                 <span>{formatDate(quote.createdAt)}</span>
-              </div>
-
-              <div className={styles.metaItem}>
-                <Heart className={styles.metaIcon} />
-                <span>{quote.likeCount}</span>
               </div>
             </div>
           </div>

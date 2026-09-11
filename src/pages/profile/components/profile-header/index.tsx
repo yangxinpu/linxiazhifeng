@@ -141,7 +141,6 @@ export default function ProfileHeader({
               <Title level={1} className={styles.profileName}>
                 {profile.displayName}
               </Title>
-              <Text className={styles.username}>@{profile.username}</Text>
               <Paragraph className={styles.bio}>{profile.bio}</Paragraph>
 
               <Space size={[16, 6]} wrap className={styles.identityMeta}>
