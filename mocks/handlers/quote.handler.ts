@@ -1,4 +1,5 @@
 import { http, HttpResponse, delay } from 'msw'
+import type { UpdateQuoteEngagementParams } from '@/api/quote'
 import { createMockQuoteDetail, CATEGORY_OPTIONS } from '@mocks/fakers'
 import { mockQuotes } from '@mocks/data/content.data'
 
@@ -95,12 +96,61 @@ export const quoteHandlers = [
       )
     }
 
+    quote.viewCount += 1
     const detail = createMockQuoteDetail(quote)
 
     return HttpResponse.json({
       code: 0,
       message: '请求成功',
       data: detail,
+    })
+  }),
+
+  http.patch(`${BASE_URL}/quotes/:id/engagement`, async ({ params, request }) => {
+    await delay(220)
+
+    const id = Number(params.id)
+    const quote = mockQuotes.find((item) => item.id === id)
+
+    if (!quote) {
+      return HttpResponse.json(
+        { code: 40400, message: '请求资源不存在', data: null },
+        { status: 404 },
+      )
+    }
+
+    const engagement = await request.json() as Partial<UpdateQuoteEngagementParams>
+    const isValidType = engagement.type === 'like' || engagement.type === 'favorite'
+
+    if (!isValidType || typeof engagement.isActive !== 'boolean') {
+      return HttpResponse.json(
+        { code: 40000, message: '互动参数无效', data: null },
+        { status: 400 },
+      )
+    }
+
+    if (engagement.type === 'like' && quote.isLiked !== engagement.isActive) {
+      quote.isLiked = engagement.isActive
+      quote.likeCount = Math.max(0, quote.likeCount + (engagement.isActive ? 1 : -1))
+    }
+
+    if (engagement.type === 'favorite' && quote.isFavorited !== engagement.isActive) {
+      quote.isFavorited = engagement.isActive
+      quote.favoriteCount = Math.max(
+        0,
+        quote.favoriteCount + (engagement.isActive ? 1 : -1),
+      )
+    }
+
+    return HttpResponse.json({
+      code: 0,
+      message: engagement.isActive ? '操作成功' : '已取消',
+      data: {
+        likeCount: quote.likeCount,
+        favoriteCount: quote.favoriteCount,
+        isLiked: quote.isLiked,
+        isFavorited: quote.isFavorited,
+      },
     })
   }),
 ]

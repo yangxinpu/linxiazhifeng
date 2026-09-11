@@ -246,9 +246,8 @@
 .sectionHeading {
   display: grid;
   max-width: 860px;
-  grid-template-columns: 160px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   align-items: start;
-  gap: 36px;
   margin-bottom: 48px;
 
   h2 {
@@ -258,13 +257,6 @@
     font-weight: 700;
     line-height: 1.45;
   }
-}
-
-.sectionIndex {
-  padding-top: 8px;
-  color: var(--brand-b);
-  font-size: 11px;
-  font-weight: 750;
 }
 
 .pathGrid {
@@ -354,7 +346,6 @@
   margin-bottom: 42px;
 
   h2 {
-    margin-top: 8px;
     color: var(--foreground);
     font-family: var(--font-quote);
     font-size: 34px;
@@ -713,16 +704,11 @@
 
   .sectionHeading {
     grid-template-columns: 1fr;
-    gap: 12px;
     margin-bottom: 32px;
 
     h2 {
       font-size: 28px;
     }
-  }
-
-  .sectionIndex {
-    padding-top: 0;
   }
 
   .pathGrid {

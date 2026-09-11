@@ -1,9 +1,19 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeftOutlined as ArrowLeft, BookOutlined as BookOpen, UserOutlined as User, MessageOutlined as Quote } from '@ant-design/icons'
-import { getQuoteDetail, getCategories } from '@/api'
-import type { QuoteDetail } from '@/api'
-import type { Category } from '@/api'
+import {
+  ArrowLeftOutlined as ArrowLeft,
+  BookOutlined as BookOpen,
+  EyeOutlined as Eye,
+  HeartFilled,
+  HeartOutlined as Heart,
+  MessageOutlined as Quote,
+  StarFilled,
+  StarOutlined as Star,
+  UserOutlined as User,
+} from '@ant-design/icons'
+import { getCategories, getQuoteDetail, updateQuoteEngagement } from '@/api'
+import type { Category, QuoteDetail, QuoteEngagementType } from '@/api'
+import { useScrollDownVisibility } from '@/hooks'
 import { formatDate } from '@/utils'
 import PageSkeleton from '@/components/page-skeleton'
 import { toast } from 'sonner'
@@ -17,6 +27,8 @@ export default function QuoteDetailPage() {
   const [categories, setCategories] = useState<Category[]>([])
   const [loadedRouteId, setLoadedRouteId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [updatingEngagement, setUpdatingEngagement] = useState<QuoteEngagementType | null>(null)
+  const isBackTitleVisible = useScrollDownVisibility()
   const quoteId = Number(id)
   const routeError = !id
     ? '缺少名言ID'
@@ -69,6 +81,27 @@ export default function QuoteDetailPage() {
     }
   }, [id, quoteId, routeError])
 
+  async function handleEngagement(type: QuoteEngagementType) {
+    if (!quote || updatingEngagement !== null) return
+
+    const isActive = type === 'like' ? !quote.isLiked : !quote.isFavorited
+    setUpdatingEngagement(type)
+
+    try {
+      const response = await updateQuoteEngagement(quote.quoteId, { type, isActive })
+      setQuote((currentQuote) => currentQuote
+        ? { ...currentQuote, ...response.data }
+        : currentQuote)
+      toast.success(type === 'like'
+        ? isActive ? '已点赞' : '已取消点赞'
+        : isActive ? '已收藏' : '已取消收藏')
+    } catch (requestError) {
+      toast.error(requestError instanceof Error ? requestError.message : '操作失败，请稍后重试')
+    } finally {
+      setUpdatingEngagement(null)
+    }
+  }
+
   if (isPageLoading) {
     return <PageSkeleton variant="detail" />
   }
@@ -117,46 +150,101 @@ export default function QuoteDetailPage() {
             type="button"
             onClick={() => navigate('/quotes')}
             className={styles.backBtn}
+            aria-label="返回名言列表"
           >
             <ArrowLeft className={styles.backIcon} />
             <span>返回列表</span>
           </button>
+          <h2
+            className={`${styles.backBarTitle} ${
+              isBackTitleVisible ? styles.backBarTitleVisible : ''
+            }`}
+            title={quote.content}
+            aria-hidden="true"
+          >
+            {quote.content}
+          </h2>
+          <div className={styles.backBarActions}>
+            <span
+              className={styles.viewMetric}
+              aria-label={`浏览量 ${quote.viewCount}`}
+              title={`浏览量 ${quote.viewCount}`}
+            >
+              <Eye />
+              <span className={styles.actionCount}>{quote.viewCount}</span>
+            </span>
+            <button
+              type="button"
+              className={`${styles.actionButton} ${
+                quote.isLiked ? styles.actionButtonActive : ''
+              }`}
+              onClick={() => void handleEngagement('like')}
+              disabled={updatingEngagement !== null}
+              aria-label={quote.isLiked ? '取消点赞' : '点赞'}
+              aria-pressed={quote.isLiked}
+              title={quote.isLiked ? '取消点赞' : '点赞'}
+            >
+              {quote.isLiked ? <HeartFilled /> : <Heart />}
+              <span className={styles.actionCount}>{quote.likeCount}</span>
+            </button>
+            <button
+              type="button"
+              className={`${styles.actionButton} ${
+                quote.isFavorited ? styles.actionButtonActive : ''
+              }`}
+              onClick={() => void handleEngagement('favorite')}
+              disabled={updatingEngagement !== null}
+              aria-label={quote.isFavorited ? '取消收藏' : '收藏'}
+              aria-pressed={quote.isFavorited}
+              title={quote.isFavorited ? '取消收藏' : '收藏'}
+            >
+              {quote.isFavorited ? <StarFilled /> : <Star />}
+              <span className={styles.actionCount}>{quote.favoriteCount}</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className={styles.card}>
-        <article className={styles.cardBody}>
-          <header>
+      <article className={styles.card}>
+        <header className={styles.quoteHeader}>
+          <div className={styles.quoteHeaderInner}>
             <div className={styles.tagRow}>
               <span className={styles.tag}>{categoryLabel}</span>
             </div>
-          </header>
 
-          <Quote className={styles.quoteIcon} aria-hidden="true" />
+            <Quote className={styles.quoteIcon} aria-hidden="true" />
 
-          <h1 className={styles.quoteContent}>
-            {quote.content}
-          </h1>
+            <h1 className={styles.quoteContent}>
+              {quote.content}
+            </h1>
 
-          <div className={styles.divider} />
+            <div className={styles.divider} />
 
-          <div className={styles.meta}>
-            <div className={styles.metaAuthor}>
-              <div className={styles.metaAvatar}>
-                <User className={styles.metaIcon} />
+            <div className={styles.meta}>
+              <div className={styles.metaAuthor}>
+                <div className={styles.metaAvatar}>
+                  <User className={styles.metaIcon} />
+                </div>
+                <div>
+                  <div className={styles.metaAuthorName}>{quote.author}</div>
+                  {quote.source && <div className={styles.metaSource}>{quote.source}</div>}
+                </div>
               </div>
-              <div>
-                <div className={styles.metaAuthorName}>{quote.author}</div>
-                {quote.source && <div className={styles.metaSource}>{quote.source}</div>}
-              </div>
-            </div>
 
-            <div className={styles.metaItem}>
-              <BookOpen className={styles.metaIcon} />
-              <span>{formatDate(quote.createdAt)}</span>
+              <div className={styles.metaItem}>
+                <BookOpen className={styles.metaIcon} />
+                <span>{formatDate(quote.createdAt)}</span>
+              </div>
+
+              <div className={styles.metaItem}>
+                <Heart className={styles.metaIcon} />
+                <span>{quote.likeCount}</span>
+              </div>
             </div>
           </div>
+        </header>
 
+        <div className={styles.cardBody}>
           {quote.background && (
             <div className={styles.background}>
               {quote.background}
@@ -167,8 +255,8 @@ export default function QuoteDetailPage() {
             <img src={logo} alt="" className={styles.brandLogo} />
             <span className={styles.brandName}>Linxiazhifeng</span>
           </div>
-        </article>
-      </div>
+        </div>
+      </article>
     </section>
   )
 }

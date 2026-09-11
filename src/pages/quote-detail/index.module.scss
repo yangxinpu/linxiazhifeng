@@ -1,30 +1,38 @@
 .section {
   min-height: calc(100svh - var(--header-height));
+  padding-top: 48px;
   background: var(--background);
 }
 
 .backBar {
-  position: sticky;
+  position: fixed;
   top: var(--header-height);
+  right: 0;
+  left: 0;
   z-index: 40;
   border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
   background: color-mix(in srgb, var(--background) 92%, transparent);
+  box-shadow: var(--shadow-1);
   backdrop-filter: blur(12px);
 }
 
 .backBarInner {
+  display: grid;
   width: 100%;
-  max-width: var(--content-width);
-  margin: 0 auto;
-  padding: 12px 24px;
+  min-height: 48px;
+  grid-template-columns: minmax(120px, 1fr) minmax(0, 2fr) minmax(120px, 1fr);
+  align-items: center;
+  padding: 0 var(--layout-gutter);
+  gap: 16px;
 }
 
 .backBtn {
   display: inline-flex;
-  min-height: 36px;
+  min-height: 32px;
+  justify-self: start;
   align-items: center;
   gap: 8px;
-  padding: 6px 12px;
+  padding: 4px 8px;
   border-radius: var(--radius-md);
   color: var(--muted-foreground);
   font-size: 14px;
@@ -36,6 +44,79 @@
   }
 }
 
+.backBarTitle {
+  visibility: hidden;
+  width: 100%;
+  max-width: 640px;
+  overflow: hidden;
+  justify-self: center;
+  color: var(--foreground);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  opacity: 0;
+  text-align: center;
+  text-overflow: ellipsis;
+  transform: translateY(4px);
+  transition:
+    opacity 180ms ease-in-out,
+    transform 180ms ease-in-out,
+    visibility 0s linear 180ms;
+  white-space: nowrap;
+  will-change: opacity, transform;
+}
+
+.backBarTitleVisible {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0ms;
+}
+
+.backBarActions {
+  display: flex;
+  justify-self: end;
+  align-items: center;
+  gap: 8px;
+}
+
+.actionButton,
+.viewMetric {
+  display: inline-flex;
+  height: 36px;
+  min-width: 36px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 4px;
+  color: var(--muted-foreground);
+  font-size: 20px;
+}
+
+.actionButton {
+  transition: color 160ms ease;
+
+  &:hover:not(:disabled) {
+    color: var(--primary);
+  }
+
+  &:disabled {
+    cursor: wait;
+    opacity: 0.55;
+  }
+}
+
+.actionButtonActive {
+  color: var(--primary);
+}
+
+.actionCount {
+  min-width: 1ch;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  text-align: left;
+}
+
 .backIcon,
 .metaIcon {
   font-size: 16px;
@@ -43,13 +124,34 @@
 
 .card {
   width: 100%;
+  padding-bottom: 48px;
+  border-bottom: 1px solid var(--border);
+  background: var(--background);
+}
+
+.quoteHeader {
+  position: sticky;
+  top: calc(var(--header-height) + 48px);
+  z-index: 30;
+  width: 100%;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  background: color-mix(in srgb, var(--card) 96%, transparent);
+  box-shadow: var(--shadow-1);
+  backdrop-filter: blur(12px);
+}
+
+.quoteHeaderInner {
+  width: 100%;
   max-width: var(--content-width);
   margin: 0 auto;
-  padding: 48px 24px;
+  padding: 16px 32px;
 }
 
 .cardBody {
-  padding: 48px;
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 32px auto 0;
+  padding: 32px;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--card);
@@ -61,11 +163,11 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
 }
 
 .tag {
-  padding: 4px 12px;
+  padding: 4px 8px;
   border-radius: var(--radius-md);
   color: var(--primary);
   background: var(--accent);
@@ -74,26 +176,26 @@
 }
 
 .quoteIcon {
-  margin-bottom: 24px;
+  margin-bottom: 12px;
   color: var(--primary);
-  font-size: 32px;
+  font-size: 24px;
   opacity: 0.45;
 }
 
 .quoteContent {
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   color: var(--foreground);
   font-family: var(--font-quote);
-  font-size: 36px;
+  font-size: 32px;
   font-weight: 500;
-  line-height: 1.6;
+  line-height: 1.5;
   overflow-wrap: anywhere;
 }
 
 .divider {
   width: 48px;
   height: 2px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   background: var(--primary);
 }
 
@@ -148,9 +250,6 @@
 }
 
 .background {
-  margin-top: 32px;
-  padding-top: 32px;
-  border-top: 1px solid var(--border);
   color: var(--muted-foreground);
   font-size: 16px;
   line-height: 1.8;
@@ -212,28 +311,60 @@
 }
 
 @media (max-width: 767px) {
-  .backBarInner,
-  .card {
-    padding-right: 16px;
-    padding-left: 16px;
+  .backBarInner {
+    grid-template-columns: 32px minmax(0, 1fr) auto;
+    padding-right: var(--layout-gutter);
+    padding-left: var(--layout-gutter);
+    gap: 8px;
+  }
+
+  .backBtn {
+    width: 32px;
+    justify-content: center;
+    padding: 0;
+
+    span {
+      display: none;
+    }
+  }
+
+  .actionButton,
+  .viewMetric {
+    width: 36px;
+    padding: 0;
+  }
+
+  .actionCount {
+    display: none;
   }
 
   .card {
-    padding-top: 32px;
     padding-bottom: 32px;
   }
 
+  .quoteHeaderInner {
+    padding: 12px 24px;
+  }
+
   .cardBody {
+    width: calc(100% - 32px);
+    margin-top: 24px;
     padding: 24px;
   }
 
   .quoteContent {
-    font-size: 28px;
+    font-size: 24px;
   }
 
   .meta {
     align-items: flex-start;
     flex-direction: column;
     gap: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backBarTitle {
+    transition-duration: 0.01ms;
   }
 }

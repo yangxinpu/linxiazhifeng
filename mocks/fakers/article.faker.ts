@@ -9,7 +9,11 @@ export interface MockArticle {
   category: 'technology' | 'philosophy' | 'literature' | 'science' | 'life' | 'wisdom' | 'art' | 'history'
   cover?: string
   tags: string[]
+  viewCount: number
   likeCount: number
+  favoriteCount: number
+  isLiked: boolean
+  isFavorited: boolean
   createdAt: string
   updatedAt: string
 }
@@ -26,7 +30,17 @@ export const ARTICLE_CATEGORIES = [
   { value: 'history', label: '历史' },
 ]
 
-const ARTICLE_POOL: Omit<MockArticle, 'id' | 'createdAt' | 'updatedAt' | 'likeCount'>[] = [
+const ARTICLE_POOL: Omit<
+  MockArticle,
+  | 'id'
+  | 'createdAt'
+  | 'updatedAt'
+  | 'viewCount'
+  | 'likeCount'
+  | 'favoriteCount'
+  | 'isLiked'
+  | 'isFavorited'
+>[] = [
   {
     title: '人工智能时代的思考：技术如何重塑我们的生活',
     summary: '探讨人工智能技术对社会、经济和日常生活的深远影响，以及我们应该如何应对这场技术革命。从智能助手到自动驾驶，从医疗诊断到金融分析，AI正在以前所未有的速度改变着我们的世界，带来便利的同时也引发了对伦理、隐私和人性温度的深刻思考。',
@@ -137,7 +151,11 @@ export function createMockArticleList(count: number): MockArticle[] {
   return ARTICLE_POOL.slice(0, count).map((article, index) => ({
     ...article,
     id: index + 1,
+    viewCount: faker.number.int({ min: 100, max: 10000 }),
     likeCount: faker.number.int({ min: 10, max: 1000 }),
+    favoriteCount: faker.number.int({ min: 5, max: 500 }),
+    isLiked: faker.datatype.boolean({ probability: 0.25 }),
+    isFavorited: faker.datatype.boolean({ probability: 0.2 }),
     createdAt: faker.date.past({ years: 2 }).toISOString(),
     updatedAt: faker.date.recent({ days: 30 }).toISOString(),
   }))

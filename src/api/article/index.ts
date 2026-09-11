@@ -1,7 +1,12 @@
 export type * from './type'
 
-import { get } from '../http-client'
-import type { Article, ArticleDetail } from './type'
+import { get, patch } from '../http-client'
+import type {
+  Article,
+  ArticleDetail,
+  ArticleEngagement,
+  UpdateArticleEngagementParams,
+} from './type'
 import type { Category, PaginatedResponse, ApiResponse } from '../global-type'
 
 export const getArticleCategories = async (): Promise<ApiResponse<Category[]>> => 
@@ -23,3 +28,11 @@ export const getArticleById = async (id: number): Promise<ApiResponse<Article>> 
 
 export const getArticleDetail = async (id: number): Promise<ApiResponse<ArticleDetail>> => 
   get<ArticleDetail>(`/articles/${id}/detail`)
+
+/** 更新文章的点赞或收藏状态。 */
+export function updateArticleEngagement(
+  id: number,
+  engagement: UpdateArticleEngagementParams,
+): Promise<ApiResponse<ArticleEngagement>> {
+  return patch<ArticleEngagement>(`/articles/${id}/engagement`, { ...engagement })
+}

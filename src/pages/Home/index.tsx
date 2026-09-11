@@ -74,11 +74,6 @@ export default function Home() {
           </div>
 
           <div className={styles.heroContent}>
-            <p className={styles.eyebrow}>
-              <span className={styles.eyebrowMark} aria-hidden="true" />
-              每日阅读 · 长久生长
-            </p>
-
             <h1 id="home-title" className={styles.title}>
               <span className={styles.titlePrimary}>林下</span>
               <span>之风</span>
@@ -120,7 +115,6 @@ export default function Home() {
       <section className={styles.pathsSection} aria-labelledby="paths-title">
         <div className={styles.sectionInner}>
           <header className={styles.sectionHeading}>
-            <p className={styles.sectionIndex}>01 / 阅读路径</p>
             <h2 id="paths-title">从此刻开始，读一点真正留下来的文字</h2>
           </header>
 
@@ -162,7 +156,6 @@ export default function Home() {
         <div className={styles.sectionInner}>
           <header className={styles.splitHeading}>
             <div>
-              <p className={styles.sectionIndex}>02 / 最近更新</p>
               <h2 id="latest-title">今天值得读的文章</h2>
             </div>
             <Link to="/articles" className={styles.textLink}>
@@ -220,7 +213,6 @@ export default function Home() {
         <div className={styles.sectionInner}>
           <header className={styles.splitHeading}>
             <div>
-              <p className={styles.sectionIndex}>03 / 片刻思考</p>
               <h2 id="quotes-title">带走一句话</h2>
             </div>
             <CompassOutlined className={styles.sectionSymbol} aria-hidden="true" />

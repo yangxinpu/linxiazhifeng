@@ -1,7 +1,12 @@
 export type * from './type'
 
-import { get } from '../http-client'
-import type { Quote, QuoteDetail } from './type'
+import { get, patch } from '../http-client'
+import type {
+  Quote,
+  QuoteDetail,
+  QuoteEngagement,
+  UpdateQuoteEngagementParams,
+} from './type'
 import type { Category, PaginatedResponse, ApiResponse } from '../global-type'
 
 export const getCategories = async (): Promise<ApiResponse<Category[]>> => get<Category[]>('/quotes/categories')
@@ -15,3 +20,11 @@ export const getQuoteList = async (params?: { page?: number; pageSize?: number; 
 export const getQuoteById = async (id: number): Promise<ApiResponse<Quote>> => get<Quote>(`/quotes/${id}`)
 
 export const getQuoteDetail = async (id: number): Promise<ApiResponse<QuoteDetail>> => get<QuoteDetail>(`/quotes/${id}/detail`)
+
+/** 更新名言的点赞或收藏状态。 */
+export function updateQuoteEngagement(
+  id: number,
+  engagement: UpdateQuoteEngagementParams,
+): Promise<ApiResponse<QuoteEngagement>> {
+  return patch<QuoteEngagement>(`/quotes/${id}/engagement`, { ...engagement })
+}

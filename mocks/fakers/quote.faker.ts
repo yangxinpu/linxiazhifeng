@@ -8,6 +8,11 @@ export interface MockQuote {
   category: 'philosophy' | 'literature' | 'science' | 'life' | 'wisdom' | 'love' | 'friendship' | 'success' | 'courage' | 'education' | 'nature' | 'art' | 'history'
   detailId: number
   background?: string
+  viewCount: number
+  likeCount: number
+  favoriteCount: number
+  isLiked: boolean
+  isFavorited: boolean
   createdAt: string
 }
 
@@ -21,6 +26,11 @@ export interface MockQuoteDetail {
   authorBio: string
   story: string
   background: string
+  viewCount: number
+  likeCount: number
+  favoriteCount: number
+  isLiked: boolean
+  isFavorited: boolean
   createdAt: string
 }
 
@@ -46,7 +56,17 @@ export const CATEGORY_OPTIONS: MockCategory[] = [
   { value: 'history', label: '历史' },
 ]
 
-const QUOTE_POOL: Omit<MockQuote, 'id' | 'detailId' | 'createdAt'>[] = [
+const QUOTE_POOL: Omit<
+  MockQuote,
+  | 'id'
+  | 'detailId'
+  | 'createdAt'
+  | 'viewCount'
+  | 'likeCount'
+  | 'favoriteCount'
+  | 'isLiked'
+  | 'isFavorited'
+>[] = [
   { content: '不是看到希望才坚持，而是坚持了才看到希望', author: '佚名', source: '励志箴言', category: 'life' },
   { content: '你受的苦，会照亮你的路', author: '佚名', source: '人生感悟', category: 'life' },
   { content: '最慢的步伐不是跬步，而是徘徊；最快的脚步不是冲刺，而是持续', author: '佚名', source: '行动哲学', category: 'wisdom' },
@@ -259,6 +279,11 @@ export function createMockQuote(id: number, overrides?: Partial<MockQuote>): Moc
     id,
     detailId,
     background: authorInfo?.background || `${base.author}在${base.source}中表达了这一思想，这句话至今仍激励着无数人思考人生的意义和价值。`,
+    viewCount: faker.number.int({ min: 100, max: 10000 }),
+    likeCount: faker.number.int({ min: 10, max: 1000 }),
+    favoriteCount: faker.number.int({ min: 5, max: 500 }),
+    isLiked: faker.datatype.boolean({ probability: 0.25 }),
+    isFavorited: faker.datatype.boolean({ probability: 0.2 }),
     createdAt: faker.date.recent({ days: 30 }).toISOString(),
     ...base,
     ...overrides,
@@ -286,6 +311,11 @@ export function createMockQuoteDetail(quote: MockQuote): MockQuoteDetail {
     authorBio: authorInfo.authorBio,
     story: authorInfo.story,
     background: authorInfo.background,
+    viewCount: quote.viewCount,
+    likeCount: quote.likeCount,
+    favoriteCount: quote.favoriteCount,
+    isLiked: quote.isLiked,
+    isFavorited: quote.isFavorited,
     createdAt: quote.createdAt,
   }
 }

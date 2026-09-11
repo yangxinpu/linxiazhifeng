@@ -9,6 +9,7 @@
 .main {
   &:global(.ant-layout-content) {
     width: 100%;
+    padding-top: var(--header-height);
     color: var(--foreground);
     background: var(--background);
   }
